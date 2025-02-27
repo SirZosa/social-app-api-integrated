@@ -1,0 +1,21 @@
+.follow-nav{
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.follow-nav span{
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50px;
+}
+
+.follow-active{
+    color: #000;
+    background-color: #fff;
+}
+

@@ -1,0 +1,44 @@
+.comment-section {
+    position: fixed;
+    top: 4rem;
+    left: 0;
+    right: 0; /* Ensure it spans the full width */
+    bottom: 0;
+    z-index: 11;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: #141414;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    /* Initial position: off-screen at the bottom */
+    transform: translateY(100%);
+    /* Smooth transition for sliding */
+    transition: transform 0.3s ease;
+}
+
+.comment-section.mounted {
+    transform: translateY(0); /* Slide into view */
+}
+
+.comments-close-btn {
+    align-self: flex-start; /* Align the close button to the top-left */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.close-btn-img {
+    width: 24px; /* Adjust as needed */
+    height: 24px; /* Adjust as needed */
+}
+
+.comments {
+    flex: 1; /* Take up remaining space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin-bottom: 10px; /* Space between comments and WriteComment */
+}

@@ -1,0 +1,60 @@
+.write-comment {
+    display: flex;
+    align-items: flex-end; /* Align items to the bottom */
+    gap: 10px;
+    background-color: #1a1a1a;
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.write-comment textarea {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #333;
+    color: aliceblue;
+    font-size: 16px;
+    outline: none;
+    resize: none;
+    overflow: hidden;
+    line-height: 1.5;
+    transition: background-color 0.3s ease;
+}
+
+.write-comment textarea::placeholder {
+    color: #888;
+}
+
+.write-comment textarea:focus {
+    background-color: #444;
+}
+
+.write-button {
+    background-color: #444;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.write-comment button:hover {
+    background-color: #555;
+    transform: scale(1.1);
+}
+
+.write-button:active {
+    transform: scale(0.95);
+}
+
+.write-img {
+    width: 25px;
+    height: 25px;
+}

@@ -1,0 +1,59 @@
+.user-card{
+    display: flex;
+    width: 300px;
+    gap: 1rem;
+    justify-content: space-between;
+    padding: 1rem;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+.user-card div{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.user-card span{
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.user-card-pic{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid aliceblue;
+}
+
+.user-card-follow-btn{
+    width: 125px;
+    min-width: fit-content;
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: aliceblue;
+    background-color: #010;
+    border: 1px solid aliceblue;
+    cursor: pointer;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.unfollow-btn{
+    color: #010;
+    background-color: aliceblue;
+    border-color: #010;
+    cursor: pointer;
+}
+
+.remove-btn{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.following{
+    margin-right: 2.5rem;
+}

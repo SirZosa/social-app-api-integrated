@@ -1,0 +1,10 @@
+.notification-section{
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #141414;
+    height: calc(100dvh - 4rem);
+    gap: 1rem;
+    padding: 1rem;
+}

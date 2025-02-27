@@ -1,0 +1,38 @@
+.burger-container {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap:5px;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .burger-top,
+  .burger-bottom {
+    width: 100%;
+    height: 4px;
+    background-color: #ffffff;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .burger-top {
+    margin-bottom: 8px;
+  }
+  
+  .burger-top.close {
+    transform: translateY(0) rotate(0);
+  }
+  
+  .burger-top.open {
+    transform: translateY(8px) rotate(405deg) scaleX(1.2);
+  }
+  
+  .burger-bottom.close {
+    transform: translateY(0) rotate(0);
+  }
+  
+  .burger-bottom.open {
+    transform: translateY(-8px) rotate(-405deg) scaleX(1.2);
+  }

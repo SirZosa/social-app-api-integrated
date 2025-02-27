@@ -1,0 +1,133 @@
+nav{
+    font-family: "Inter", system-ui;
+    position:fixed;
+    top: 0;
+    right: 0;
+    background-color: #001100;
+    width: 100%;
+    height: 4rem;
+    z-index: 999;
+}
+
+.burger-icon{
+    display: flex;
+    gap: 1rem;
+}
+
+.link-active{
+    border-bottom: 2px solid aliceblue;
+}
+
+.logo{
+    cursor: pointer;
+}
+
+.nav{
+    background-color: #001100;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+}
+
+.nav-container{
+    display: block;
+    position: absolute;
+    top: 64px;
+    height: 93.5vh;
+    width: 100vw;
+    background-color: #001100;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+
+}
+
+.nav-container.open {
+    opacity: 1;
+  }
+  
+  .nav-container.close {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+.nav-container-links{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    gap: 1rem;
+    align-items: center;
+    height: 90%;
+    font-size: 2.5rem;
+    font-weight:800;
+}
+
+.nav-container-links a{
+    color: aliceblue;
+    text-decoration: none;
+}
+
+.nav-socials{
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav-links{
+    display: none;
+}
+
+.nav-links-notification-button{
+    display: flex;
+    background: none;
+    border: none;
+    position: relative;
+    cursor: pointer;
+    align-self: center;
+}
+
+.nav-links-notification-button img{
+    width: 40px;
+    height: 40px;
+}
+
+.active-notification{
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background-color: red;
+    top: 0;
+    right: 5px;
+    position: absolute;
+}
+
+@media (min-width:768px) {
+   .nav{
+    max-width: 1000px;
+    margin: 0 auto;
+    
+   }
+
+    .nav-links{
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .nav-links a{
+        color: aliceblue;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .nav-links a:hover{
+        border-bottom: 2px solid aliceblue;
+    }
+    
+    .burger-icon{
+        display: none;
+    }
+
+    .nav-container{
+        display: none;
+    }
+}
