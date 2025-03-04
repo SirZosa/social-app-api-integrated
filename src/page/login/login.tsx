@@ -7,9 +7,26 @@ export default function LogIn() {
 
   function submitForm(e: React.FormEvent){
     e.preventDefault();
-    console.log(email)
-    console.log(password)
-    alert("Form submitted");
+    fetch('http://localhost:3000/v1/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        email: email,
+        password: password
+      },
+      
+    )
+    }).then((res)=>{
+      console.log(res)
+      if(res.ok){
+        alert("Login Successful");
+      }else{
+        alert("Login Failed");
+      }
+    })
   }
 
   return (

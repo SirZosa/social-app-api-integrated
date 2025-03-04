@@ -23,6 +23,24 @@ export default function CommentSection({closeComments}: CommentSectionProps){
         setMounted(false)
         setTimeout(() => closeComments(), 300)
       }
+    function uploadComment(comment: string){
+        fetch('http://localhost:3000/v1/comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                comment: comment
+            })
+        }).then((res)=>{
+            if(res.ok){
+                alert("Comment Uploaded");
+            }else{
+                alert("Comment Upload Failed");
+            }
+        })
+    }
     return(
         <section className={`comment-section ${mounted ? 'mounted' : ''}`}>
             <button className="comments-close-btn" onClick={handleClick}>
@@ -78,7 +96,7 @@ export default function CommentSection({closeComments}: CommentSectionProps){
             date="12:10 7/4/2025"
             />
             </div>
-            <WriteComment onSubmit={(comment: string) => console.log(comment)} />
+            <WriteComment onSubmit={(comment: string) => uploadComment(comment)} />
         </section>
     )
 }
