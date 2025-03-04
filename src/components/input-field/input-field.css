@@ -21,7 +21,7 @@
     border-bottom-color: lightblue;
   }
   
-  .form-control label {
+  .form-control .inf label {
     position: absolute;
     font-size: 18px;
     top: 15px;
@@ -29,15 +29,23 @@
     pointer-events: none;
   }
   
-  .form-control label span {
+  .form-control .inf .error {
+    position: absolute;
+    font-size: 12px;
+    top: -10px;
+    color: rgb(195, 0, 0);
+    left: 120px;
+    pointer-events: none;
+  }
+  .form-control .inf label span {
     display: inline-block;
     font-size: 18px;
     min-width: 5px;
     transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
   
-  .form-control input:focus + label span,
-  .form-control input:not(:placeholder-shown) + label span {
+  .form-control input:focus + .inf label span,
+  .form-control input:not(:placeholder-shown) + .inf label span {
     color: lightblue;
     transform: translateY(-30px);
   }

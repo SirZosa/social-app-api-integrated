@@ -3,9 +3,10 @@ interface Props{
     children: string;
     type?: string;
     fc: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    error?: string;
     value: string
 }
-export default function InputField({children, type="text",fc, value,...rest}:Props){
+export default function InputField({children, type="text",fc, value,error, ...rest}:Props){
     const label = (newArr:string) =>{
         const Arr = []
         for(let i = 0; i< newArr.length; i++){
@@ -15,10 +16,14 @@ export default function InputField({children, type="text",fc, value,...rest}:Pro
     }
     return(
         <div className="form-control"{...rest}>
-                    <input name={children} type={type} required onChange={(e)=> fc(e)} placeholder="" value={value}/>
-                    <label htmlFor={children}>
-                        {label(children)}
-                    </label>
-                  </div>
+                    
+            <input name={children} type={type} required onChange={(e)=> fc(e)} placeholder="" value={value}/>
+            <div className="inf">
+                <label htmlFor={children}>
+                {label(children)}
+                </label>
+                {error && <p className="error">{error}</p>}
+            </div>
+        </div>
     )
 }

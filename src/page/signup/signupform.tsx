@@ -78,9 +78,9 @@ export default function SignUpForm() {
         <form className='signup-form' onSubmit={submitForm}>
           <InputField value={firstName} type="text" fc={(e)=>setFirstName(e.target.value)}>First Name</InputField>
           <InputField value={lastName} type="text" fc={(e)=>setLastName(e.target.value)}>Last Name</InputField>
-          <InputField value={userName} type='text' fc={(e) => setUserName(e.target.value)}>User name</InputField>
-          <InputField value={email} type="email" fc={(e)=>setEmail(e.target.value)}>Email</InputField>
-          <InputField value={password} type="password" fc={(e)=>setPassword(e.target.value)}>Password</InputField>
+          <InputField value={userName} type='text' fc={(e) => setUserName(e.target.value)} error={userNameInUse ? "Username already in use." : ""}>User name</InputField>
+          <InputField value={email} type="email" fc={(e)=>setEmail(e.target.value)} error={emailInUse ? "Email already in use.": ""}>Email</InputField>
+          <InputField value={password} type="password" fc={(e)=>setPassword(e.target.value)} error={!passwordMatch ? "Passwords don't match" : ""}>Password</InputField>
           <InputField value={confirmPassword} type="password" fc={(e)=>setConfirmPassword(e.target.value)}>Confirm Password</InputField>
           <div className="signup-form-buttons">
             <button className='signup-button' disabled={loading}>SUBMIT</button>
