@@ -39,28 +39,29 @@ export default function SignUpForm() {
         username: userName,
         email: email,
         password: password
-      },
-      
-    )
-    }).then((res)=>{
-      setLoading(false)
-      if(res.status === 406){
-        alert("Please fill all fields with valid data")
-      }
-      if(res.status === 400){
-        setEmailInUse(true)
-      }if(res.status === 409){
-        setUserNameInUse(true)
-      }
-      if(res.status === 201){
+      })})
+      .then((res)=>{
+        if(res.status === 406){
+          alert("Please fill all fields with valid data")
+        }
+        if(res.status === 400){
+          setEmailInUse(true)
+        }if(res.status === 409){
+          setUserNameInUse(true)
+        }
+        if(res.status === 201){
+          setLoading(false)
+          navigate('/login?registered=true')
+        }
+        else{
+          alert("Signup Failed");
+        }
+      }).catch((err)=>{
+        alert("Signup Failed");
+      }).finally(()=>{
         setLoading(false)
-        navigate('/login?registered=true')
-      }
-      else{
-        alert("Login Failed");
-      }
-    })
-  }
+      })
+  } 
  
   function resetForm(e: React.FormEvent){
     e.preventDefault();
@@ -75,6 +76,7 @@ export default function SignUpForm() {
   return (
     <>
       <div className="signup-container">
+      <h1 className='signup-header' style={{textAlign:"center"}}>Signup</h1>
         <form className='signup-form' onSubmit={submitForm}>
           <InputField value={firstName} type="text" fc={(e)=>setFirstName(e.target.value)}>First Name</InputField>
           <InputField value={lastName} type="text" fc={(e)=>setLastName(e.target.value)}>Last Name</InputField>
