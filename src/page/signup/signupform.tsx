@@ -56,7 +56,7 @@ export default function SignUpForm() {
         else{
           alert("Signup Failed");
         }
-      }).catch((err)=>{
+      }).catch(()=>{
         alert("Signup Failed");
       }).finally(()=>{
         setLoading(false)

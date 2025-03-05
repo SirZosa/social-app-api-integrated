@@ -6,7 +6,7 @@ export default function LogIn() {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const registered = searchParams.get('registered')
 
   function submitForm(e: React.FormEvent){
@@ -28,7 +28,7 @@ export default function LogIn() {
       }else{
         alert("Login Failed");
       }
-    }).catch((err)=>{
+    }).catch(()=>{
       alert("Login Failed");
     }).finally(()=>{
       setLoading(false)
