@@ -8,9 +8,16 @@
   }
   
   .post-header {
+    width: 100%;
+    justify-content: start;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+  }
+
+  .post-header .user-follow-btn{
+    margin-left: auto;
+    background-color: #141414;
   }
 
   a{

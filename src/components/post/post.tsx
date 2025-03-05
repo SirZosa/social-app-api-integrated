@@ -1,41 +1,53 @@
 import './post.css';
 import { useState } from 'react';
 import { Link } from 'react-router';
+import userPic from '../../assets/user.svg'
 import CommentSection from '../comment-section/comment-section.tsx';
 import LottiePlayer from '../lottie-player/lottie-player.tsx';
 import heart from '../../assets/heart.json';
 import save from '../../assets/save.json';
 import comment from '../../assets/comment.json';
-type PostProps = {
-    imgSrc?: string;
+export type PostProps = {
+    media_url: string;
     username: string;
+    user_id: string
+    profile_pic_url:string
     content: string;
-    date: string;
-    likes?: number;
-    commemtsNumber?: number;
+    date_created: string;
+    like_count: number;
+    comment_count: number;
+    post_id: string
+    is_liked?: number
+    is_saved?:number
+    is_following?:number
 }
-export default function Post({imgSrc="", username, content, date, likes=0, commemtsNumber=0}: PostProps){
+export default function Post({post_id, media_url, username, content, date_created, like_count, comment_count, profile_pic_url, user_id, is_liked=0, is_saved=0, is_following=0}: PostProps){
     const [openComments, setOpenComments] = useState(false)
+    const date = new Date(date_created)
+    const year = date.getUTCFullYear()
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0')
+    const day = String(date.getUTCDate()).padStart(2, '0')
     return(
         <article className="post">
             <header className="post-header">
-                <img src={imgSrc} alt="profile pic" />
+                <img src={profile_pic_url ?? userPic} alt="profile pic" />
                 <Link to={`/user/${username}`}>
                     <span>{username}</span>
                 </Link>
+                <button className="user-follow-btn">{is_following == 0 ? 'Follow': 'Unfollow'}</button>
             </header>
             <p className="post-content">{content}</p>
-            <span className="date">{date}</span>
+            <span className="date">{`${year}-${month}-${day}`}</span>
             <div className="icons">
                 <div className="likes-icon">
-                    <span className="num-of-likes">{likes}</span>
-                    <LottiePlayer animationDataSrc={heart} startFrame={5} endFrame={10} isActive={false} width={30} height={30}/>
+                    <span className="num-of-likes">{like_count}</span>
+                    <LottiePlayer animationDataSrc={heart} startFrame={5} endFrame={10} isActive={is_liked == 0 ? false : true} width={30} height={30}/>
                 </div>
                 <div className="comments-icon">
-                    <span className='num-of-comments'>{commemtsNumber}</span>
+                    <span className='num-of-comments'>{comment_count}</span>
                     <LottiePlayer animationDataSrc={comment} startFrame={26} endFrame={0} isActive={false} width={40} height={40} autoplay={true} loop={true} onClick={() => setOpenComments(true)}/>
                 </div>
-                <LottiePlayer animationDataSrc={save} startFrame={1} endFrame={0} isActive={false} width={30} height={30}/>
+                <LottiePlayer animationDataSrc={save} startFrame={1} endFrame={0} isActive={is_saved == 0 ? false: true} width={30} height={30}/>
             </div>
             <div className="line"></div>
             {openComments && (<CommentSection closeComments={() => setOpenComments(false)} />)}
