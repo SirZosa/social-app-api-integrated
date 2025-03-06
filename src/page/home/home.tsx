@@ -4,7 +4,7 @@ import Post from '../../components/post/post';
 import type { PostProps } from '../../components/post/post';
 import SkeletonComponent from '../../components/skeleton/skeleton-component';
 import PostUploader from '../../components/upload-post/upload-post';
-import { getPosts } from '../../utils/utils';
+import { getPosts, uploadPost } from '../../utils/utils';
 import './home.css';
 
 export default function Home() {
@@ -16,6 +16,8 @@ export default function Home() {
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const [wasPosted, setWasPosted] = useState(false)
+    const [errorToUpload, setErrorToUpload] = useState(false)
     const placeHolder = [
       <SkeletonComponent key={1} variant="post" />,
       <SkeletonComponent key={2} variant="post" />,
@@ -23,6 +25,24 @@ export default function Home() {
       <SkeletonComponent key={4} variant="post" />,
       <SkeletonComponent key={5} variant="post" />
     ]
+    async function handleUploadPost(content:string, media_url:string|undefined){
+
+        try{
+            const posted = await uploadPost(content, media_url)
+            console.log(posted)
+            if(posted){
+                setWasPosted(true)
+                setErrorToUpload(false)
+            }
+            else{
+                setWasPosted(false)
+                setErrorToUpload(true)
+            }
+        }
+        catch(e){
+            alert('Could not made the post.')
+        }
+    }
 
     function addPosts(newPosts: PostProps[]) {
         setPosts((prev) => prev.concat(newPosts));
@@ -96,7 +116,9 @@ export default function Home() {
                     <Link to={`${location.pathname}?type=following`}>Following</Link>
                 </span>
             </div>
-            <PostUploader/>
+            <PostUploader next={handleUploadPost}/>
+            {wasPosted && <p style={{textAlign:'center', color:"green", marginBottom:"1rem"}}>Post uploaded!.</p>}
+            {errorToUpload && <p style={{textAlign:'center', color:"red", marginBottom:"1rem"}}>Error, could not be posted.</p>}
             {postsCards.length > 0 ? postsCards : placeHolder}
             {isLoading && <SkeletonComponent variant="post" />}
         </section>

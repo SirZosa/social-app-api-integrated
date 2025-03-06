@@ -1,12 +1,21 @@
 import './upload-post.css'
 import { useState, useRef } from 'react';
-export default function PostUploader(){
+type PostUploaderProps = {
+    next:(text:string, media_url:string|undefined)=>void
+}
+
+export default function PostUploader({next}:PostUploaderProps){
     const [text, setText] = useState<string>('');
     const [charCount, setCharCount] = useState<number>(0);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    async function handleUpload(){
+        next(text, "")
+        setText('')
+    }
+
+    function handleTextChange(e: React.ChangeEvent<HTMLTextAreaElement>){
         const inputText = e.target.value;
         if (inputText.length <= 400) {
             setText(inputText);
@@ -14,7 +23,7 @@ export default function PostUploader(){
         }
     };
 
-    const handleImageButtonClick = () => {
+    function handleImageButtonClick(){
         if (fileInputRef.current) {
             fileInputRef.current.click(); // Trigger the file input
         }
@@ -33,7 +42,7 @@ export default function PostUploader(){
                 className="text-uploader-textarea"
                 value={text}
                 onChange={handleTextChange}
-                placeholder="Write something (max 400 characters)..."
+                placeholder="Write something (max 400 characters)... Image upload is still in development."
                 maxLength={400}
             />
             <div className="footer">
@@ -42,7 +51,7 @@ export default function PostUploader(){
                     <button className="image-button" onClick={handleImageButtonClick}>
                         Images
                     </button>
-                    <button className="upload-button" disabled={charCount === 0 && selectedFiles.length === 0}>
+                    <button className="upload-button" disabled={charCount === 0} onClick={handleUpload}>
                         Post
                     </button>
                 </div>

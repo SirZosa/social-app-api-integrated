@@ -126,3 +126,29 @@ export async function removePost(post_id:string):Promise<boolean>{
         return false
     }  
 }
+
+export async function uploadPost(content:string, media_url?:string| undefined){
+    const url = `http://localhost:3000/v1/posts`;
+    try{
+        const res = await fetch(url,{
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body:JSON.stringify({
+                content:content,
+                media_url:media_url
+            })
+        })
+        let posted = false
+        if(res.status == 201){
+            posted = true
+        }
+        return posted
+    }
+    catch(e){
+        console.log("could not remove post")
+        return false
+    } 
+}
