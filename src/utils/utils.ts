@@ -106,7 +106,7 @@ export async function removePost(post_id:string):Promise<boolean>{
     const url = `http://localhost:3000/v1/savepost`;
     try{
         const res = await fetch(url, {
-            method: 'POST',
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             },
