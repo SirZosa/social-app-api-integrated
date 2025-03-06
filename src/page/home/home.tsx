@@ -13,17 +13,22 @@ export default function Home() {
     const [posts, setPosts] = useState<PostProps[]>([]);
     const [postsCards, setPostCards] = useState<JSX.Element[]>([]);
     const [page, setPage] = useState(1);
-    const [isLoading, setIsLoading] = useState(false); // To prevent multiple simultaneous fetches
-    const [hasMore, setHasMore] = useState(true); // To track if more posts are available
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const placeHolder = [
+      <SkeletonComponent key={1} variant="post" />,
+      <SkeletonComponent key={2} variant="post" />,
+      <SkeletonComponent key={3} variant="post" />,
+      <SkeletonComponent key={4} variant="post" />,
+      <SkeletonComponent key={5} variant="post" />
+    ]
 
-    // Function to add new posts to the existing posts
     function addPosts(newPosts: PostProps[]) {
         setPosts((prev) => prev.concat(newPosts));
     }
 
-    // Function to fetch more posts
     const fetchMorePosts = async () => {
-        if (isLoading || !hasMore) return; // Stop if already loading or no more posts are available
+        if (isLoading || !hasMore) return;
         setIsLoading(true);
 
         getPosts(page, (response) => {
@@ -90,8 +95,8 @@ export default function Home() {
                     <Link to={`${location.pathname}?type=following`}>Following</Link>
                 </span>
             </div>
-            {postsCards.length > 0 ? postsCards : <SkeletonComponent variant="post" />}
-            {isLoading && <SkeletonComponent variant="post" />} {/* Show loading skeleton while fetching */}
+            {postsCards.length > 0 ? postsCards : placeHolder}
+            {isLoading && <SkeletonComponent variant="post" />}
         </section>
     );
 }

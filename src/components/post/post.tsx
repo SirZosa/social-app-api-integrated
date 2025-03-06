@@ -7,6 +7,7 @@ import LottiePlayer from '../lottie-player/lottie-player.tsx';
 import heart from '../../assets/heart.json';
 import save from '../../assets/save.json';
 import comment from '../../assets/comment.json';
+import { likePost, dislikePost } from '../../utils/utils.ts';
 export type PostProps = {
     media_url: string;
     username: string;
@@ -21,12 +22,56 @@ export type PostProps = {
     is_saved?:number
     is_following?:number
 }
-export default function Post({post_id, media_url, username, content, date_created, like_count, comment_count, profile_pic_url, user_id, is_liked=0, is_saved=0, is_following=0}: PostProps){
+export default function Post({
+    post_id,
+    media_url,
+    username,
+    content, 
+    date_created, 
+    like_count, 
+    comment_count, 
+    profile_pic_url, 
+    user_id, 
+    is_liked=0, 
+    is_saved=0, 
+    is_following=0}: PostProps){
     const [openComments, setOpenComments] = useState(false)
+    const [isLiked, setIsLiked] = useState(is_liked)
+    const [likeCount, setLikeCount] = useState(like_count)
+    const [isSaved, setIsSaved] = useState(is_saved)
+    const [isFollowing, setIsfollowing] = useState(is_following)
     const date = new Date(date_created)
     const year = date.getUTCFullYear()
     const month = String(date.getUTCMonth() + 1).padStart(2, '0')
     const day = String(date.getUTCDate()).padStart(2, '0')
+
+    async function handleLike(){
+        try{
+            if(isLiked){
+                const disliked = await dislikePost(post_id)
+                if(disliked){
+                    setIsLiked(prev => {
+                        if(prev ==1)return 0
+                        return 1
+                    })
+                    setLikeCount(prev=> prev-1)
+                }
+            }
+            else{
+                const liked = await likePost(post_id)
+                if(liked){
+                    setIsLiked(prev => {
+                        if(prev ==1)return 0
+                        return 1
+                    })
+                    setLikeCount(prev=> prev+1)
+                }
+            }
+        }
+        catch(e){
+            alert('error liking/disliking post')
+        }
+    }
     return(
         <article className="post">
             <header className="post-header">
@@ -40,8 +85,15 @@ export default function Post({post_id, media_url, username, content, date_create
             <span className="date">{`${year}-${month}-${day}`}</span>
             <div className="icons">
                 <div className="likes-icon">
-                    <span className="num-of-likes">{like_count}</span>
-                    <LottiePlayer animationDataSrc={heart} startFrame={5} endFrame={10} isActive={is_liked == 0 ? false : true} width={30} height={30}/>
+                    <span className="num-of-likes">{likeCount}</span>
+                    <LottiePlayer 
+                    animationDataSrc={heart} 
+                    startFrame={5} 
+                    endFrame={10} 
+                    isActive={is_liked == 0 ? false : true} 
+                    width={30} 
+                    height={30}
+                    onClick={handleLike}/>
                 </div>
                 <div className="comments-icon">
                     <span className='num-of-comments'>{comment_count}</span>

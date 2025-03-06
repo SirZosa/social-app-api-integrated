@@ -63,9 +63,10 @@
   }
   
   .num-of-likes, .num-of-comments {
+    width: 20px;
+    text-align: center;
     font-size: 14px;
     color: aliceblue;
-    margin-right: 5px;
   }
   
   .line {
