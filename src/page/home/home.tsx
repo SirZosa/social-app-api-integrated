@@ -3,6 +3,7 @@ import { useLocation, Link } from 'react-router';
 import Post from '../../components/post/post';
 import type { PostProps } from '../../components/post/post';
 import SkeletonComponent from '../../components/skeleton/skeleton-component';
+import PostUploader from '../../components/upload-post/upload-post';
 import { getPosts } from '../../utils/utils';
 import './home.css';
 
@@ -95,6 +96,7 @@ export default function Home() {
                     <Link to={`${location.pathname}?type=following`}>Following</Link>
                 </span>
             </div>
+            <PostUploader/>
             {postsCards.length > 0 ? postsCards : placeHolder}
             {isLoading && <SkeletonComponent variant="post" />}
         </section>

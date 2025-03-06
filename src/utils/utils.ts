@@ -76,3 +76,53 @@ export async function dislikePost(post_id:string):Promise<boolean>{
         return false
     }  
 }
+
+export async function savePost(post_id:string):Promise<boolean>{
+    const url = `http://localhost:3000/v1/savepost`;
+    try{
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body:JSON.stringify({
+                post_id:post_id
+            })
+        })
+        let saved = false
+        if(res.status == 201){
+            saved = true
+        }
+        return saved
+    }
+    catch(e){
+        console.log("could not save post")
+        return false
+    }  
+}
+
+export async function removePost(post_id:string):Promise<boolean>{
+    const url = `http://localhost:3000/v1/savepost`;
+    try{
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body:JSON.stringify({
+                post_id:post_id
+            })
+        })
+        let removed = false
+        if(res.status == 200){
+            removed = true
+        }
+        return removed
+    }
+    catch(e){
+        console.log("could not remove post")
+        return false
+    }  
+}

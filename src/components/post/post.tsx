@@ -7,7 +7,7 @@ import LottiePlayer from '../lottie-player/lottie-player.tsx';
 import heart from '../../assets/heart.json';
 import save from '../../assets/save.json';
 import comment from '../../assets/comment.json';
-import { likePost, dislikePost } from '../../utils/utils.ts';
+import { likePost, dislikePost, savePost, removePost } from '../../utils/utils.ts';
 export type PostProps = {
     media_url: string;
     username: string;
@@ -72,6 +72,32 @@ export default function Post({
             alert('error liking/disliking post')
         }
     }
+
+    async function handleSave(){
+        try{
+            if(isSaved){
+                const removed = await removePost(post_id)
+                if(removed){
+                    setIsSaved(prev => {
+                        if(prev ==1)return 0
+                        return 1
+                    })
+                }
+            }
+            else{
+                const removed = await savePost(post_id)
+                if(removed){
+                    setIsSaved(prev => {
+                        if(prev ==1)return 0
+                        return 1
+                    })
+                }
+            }
+        }
+        catch(e){
+            alert('error saving/removing post')
+        }
+    }
     return(
         <article className="post">
             <header className="post-header">
@@ -87,19 +113,28 @@ export default function Post({
                 <div className="likes-icon">
                     <span className="num-of-likes">{likeCount}</span>
                     <LottiePlayer 
-                    animationDataSrc={heart} 
-                    startFrame={5} 
-                    endFrame={10} 
-                    isActive={is_liked == 0 ? false : true} 
-                    width={30} 
-                    height={30}
-                    onClick={handleLike}/>
+                        animationDataSrc={heart} 
+                        startFrame={5} 
+                        endFrame={10} 
+                        isActive={is_liked == 0 ? false : true} 
+                        width={30} 
+                        height={30}
+                        onClick={handleLike}
+                    />
                 </div>
                 <div className="comments-icon">
                     <span className='num-of-comments'>{comment_count}</span>
                     <LottiePlayer animationDataSrc={comment} startFrame={26} endFrame={0} isActive={false} width={40} height={40} autoplay={true} loop={true} onClick={() => setOpenComments(true)}/>
                 </div>
-                <LottiePlayer animationDataSrc={save} startFrame={1} endFrame={0} isActive={is_saved == 0 ? false: true} width={30} height={30}/>
+                <LottiePlayer 
+                    animationDataSrc={save}
+                    startFrame={0}
+                    endFrame={1} 
+                    isActive={is_saved == 0 ? false: true} 
+                    width={30} 
+                    height={30}
+                    onClick={handleSave}
+                />
             </div>
             <div className="line"></div>
             {openComments && (<CommentSection closeComments={() => setOpenComments(false)} />)}

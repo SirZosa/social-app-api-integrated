@@ -1,0 +1,70 @@
+/* Container */
+.text-uploader {
+    background-color: #1E1E1E; /* Slightly lighter than the app background for contrast */
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Textarea */
+.text-uploader textarea {
+    width: 100%;
+    min-height: 150px;
+    background-color: #2A2A2A; /* Darker background for the textarea */
+    color: #FFFFFF; /* White text for contrast */
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    resize: none; /* Allow vertical resizing */
+    outline: none;
+}
+
+/* Footer */
+.text-uploader .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+/* Character Count */
+.text-uploader .char-count {
+    color: #888;
+    font-size: 14px;
+}
+
+/* Buttons */
+.text-uploader .image-button,
+.text-uploader .upload-button {
+    background-color: #6200EE; /* Purple accent color */
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 8px; /* Space between buttons */
+}
+
+/* Disabled Upload Button */
+.text-uploader .upload-button:disabled {
+    background-color: #444;
+    cursor: not-allowed;
+}
+
+/* File Input */
+.text-uploader .file-input {
+    display: none; /* Hide the default file input */
+}
+
+/* Selected Files */
+.text-uploader .selected-files {
+    margin-top: 12px;
+    color: #888;
+    font-size: 14px;
+}
