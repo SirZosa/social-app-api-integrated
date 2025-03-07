@@ -26,10 +26,8 @@ export default function Home() {
       <SkeletonComponent key={5} variant="post" />
     ]
     async function handleUploadPost(content:string, media_url:string|undefined){
-
         try{
             const posted = await uploadPost(content, media_url)
-            console.log(posted)
             if(posted){
                 setWasPosted(true)
                 setErrorToUpload(false)

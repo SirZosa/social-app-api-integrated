@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSearchParams } from 'react-router';
+import { useSearchParams, useNavigate } from 'react-router';
 import InputField from '../../components/input-field/input-field';
 
 export default function LogIn() {
@@ -8,6 +8,7 @@ export default function LogIn() {
   const [password, setPassword] = useState("")
   const [searchParams] = useSearchParams()
   const registered = searchParams.get('registered')
+  const navigate = useNavigate();
 
   function submitForm(e: React.FormEvent){
     e.preventDefault();
@@ -24,7 +25,7 @@ export default function LogIn() {
       })})
       .then((res)=>{
       if(res.ok){
-        alert("Login Successful");
+        navigate('/')
       }else{
         alert("Login Failed");
       }
