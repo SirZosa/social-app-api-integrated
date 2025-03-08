@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useLocation, Link } from 'react-router';
 import Post from '../../components/post/post';
 import type { PostProps } from '../../components/post/post';
 import SkeletonComponent from '../../components/skeleton/skeleton-component';
 import PostUploader from '../../components/upload-post/upload-post';
 import { getPosts, uploadPost } from '../../utils/utils';
+import { UserContext } from '../../App';
 import './home.css';
 
 export default function Home() {
@@ -25,6 +26,8 @@ export default function Home() {
       <SkeletonComponent key={4} variant="post" />,
       <SkeletonComponent key={5} variant="post" />
     ]
+
+    const userInfo = useContext(UserContext)
     async function handleUploadPost(content:string, media_url:string|undefined){
         try{
             const posted = await uploadPost(content, media_url)

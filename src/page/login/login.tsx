@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import type { UserInfo } from '../../App';
 import { useSearchParams, useNavigate } from 'react-router';
 import InputField from '../../components/input-field/input-field';
 
-export default function LogIn() {
+export default function LogIn({next}:{next:(info:UserInfo)=>void}) {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
@@ -10,30 +11,29 @@ export default function LogIn() {
   const registered = searchParams.get('registered')
   const navigate = useNavigate();
 
-  function submitForm(e: React.FormEvent){
+  async function submitForm(e: React.FormEvent){
     e.preventDefault();
     setLoading(true)
-    fetch('http://localhost:3000/v1/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include',
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })})
-      .then((res)=>{
-      if(res.ok){
-        navigate('/')
-      }else{
-        alert("Login Failed");
-      }
-    }).catch(()=>{
-      alert("Login Failed");
-    }).finally(()=>{
-      setLoading(false)
-    })
+    try{
+      const res = await fetch('http://localhost:3000/v1/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })})
+        if(res.status == 200){
+          const info = await res.json()
+          next(info)
+          navigate('/')
+        }
+    }
+    catch(e){
+      alert('Could not log in')
+    }
   }
 
   return (
