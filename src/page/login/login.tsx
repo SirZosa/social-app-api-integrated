@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import type { UserInfo } from '../../App';
 import { useSearchParams, useNavigate } from 'react-router';
 import InputField from '../../components/input-field/input-field';
 
-export default function LogIn({next}:{next:(info:UserInfo)=>void}) {
+export default function LogIn() {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
@@ -26,8 +25,6 @@ export default function LogIn({next}:{next:(info:UserInfo)=>void}) {
           password: password
         })})
         if(res.status == 200){
-          const info = await res.json()
-          next(info)
           navigate('/')
         }
     }

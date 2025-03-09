@@ -17,7 +17,6 @@ export default function Home() {
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const [wasPosted, setWasPosted] = useState(false)
     const [errorToUpload, setErrorToUpload] = useState(false)
     const placeHolder = [
       <SkeletonComponent key={1} variant="post" />,
@@ -31,12 +30,28 @@ export default function Home() {
     async function handleUploadPost(content:string, media_url:string|undefined){
         try{
             const posted = await uploadPost(content, media_url)
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            const day = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
             if(posted){
-                setWasPosted(true)
+                const {post_id} = posted
+                const newPost = [<Post 
+                post_id={post_id} 
+                user_id={userInfo.user_id} 
+                media_url=''
+                username={userInfo.username} 
+                profile_pic_url={userInfo.profile_pic}
+                content={content}
+                like_count={0}
+                comment_count={0}
+                date_created={formattedDate}
+                />]
+                setPostCards(prev => newPost.concat(prev))
                 setErrorToUpload(false)
             }
             else{
-                setWasPosted(false)
                 setErrorToUpload(true)
             }
         }
@@ -118,7 +133,6 @@ export default function Home() {
                 </span>
             </div>
             <PostUploader next={handleUploadPost}/>
-            {wasPosted && <p style={{textAlign:'center', color:"green", marginBottom:"1rem"}}>Post uploaded!.</p>}
             {errorToUpload && <p style={{textAlign:'center', color:"red", marginBottom:"1rem"}}>Error, could not be posted.</p>}
             {postsCards.length > 0 ? postsCards : placeHolder}
             {isLoading && <SkeletonComponent variant="post" />}

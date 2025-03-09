@@ -141,14 +141,32 @@ export async function uploadPost(content:string, media_url?:string| undefined){
                 media_url:media_url
             })
         })
-        let posted = false
         if(res.status == 201){
-            posted = true
+            const post_id = await res.json()
+            return post_id
         }
-        return posted
     }
     catch(e){
         console.log("could not remove post")
         return false
-    } 
+    }
+}
+
+export async function getUserInfo(){
+    const url = 'http://localhost:3000/v1/user'
+    try{
+        const res = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'})
+          if(res.status == 200){
+            const info = await res.json()
+            return info
+          }
+      }
+      catch(e){
+        alert('Could not log in')
+      }
 }

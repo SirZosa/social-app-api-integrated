@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
-import { useState, createContext } from 'react'
+import { useState, createContext, useEffect } from 'react'
+import { getUserInfo } from './utils/utils'
 import Layout from './page/layout/layout'
 import Home from './page/home/home'
 import UserPage from './page/user-page/user-page'
@@ -13,18 +14,44 @@ export type UserInfo = {
   email: string,
   first_name: string,
   last_name: string,
-  profile_pic: string|null
-  profile_background_pic: string|null,
+  profile_pic: string
+  profile_background_pic: string,
   user_id:string,
   username: string
 }
 
-export const UserContext = createContext<UserInfo | null>(null)
+export const UserContext = createContext<UserInfo>({
+  date_created:'',
+  email: '',
+  first_name: '',
+  last_name: '',
+  profile_pic: '',
+  profile_background_pic: '',
+  user_id:'',
+  username: ''
+})
 function App() {
-  const [userInfo, setUserInfo] = useState<UserInfo|null>(null)
-  function getUserInfo(info:UserInfo){
-    setUserInfo(info)
-  }
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    date_created:'',
+    email: '',
+    first_name: '',
+    last_name: '',
+    profile_pic: '',
+    profile_background_pic: '',
+    user_id:'',
+    username: ''
+  })
+
+  useEffect(()=>{
+    async function getInfo(){
+      const info = await getUserInfo()
+      if(info){
+        console.log(info)
+        setUserInfo(info)
+      }
+    }
+    getInfo()
+  },[])
   return (
     <UserContext.Provider value={userInfo}>
       <BrowserRouter>
@@ -35,7 +62,7 @@ function App() {
             <Route path='user/:id/follow' element={<Follow/>}/>
             <Route index element={<Home/>} />
             <Route path='/signup' element={<SignUpForm/>}/>
-            <Route path='/login' element={<LogIn next={getUserInfo}/>}/>
+            <Route path='/login' element={<LogIn/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
