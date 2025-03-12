@@ -1,3 +1,5 @@
+import type {CommentData} from '../components/comment-section/comment-section'
+
 export function getPosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
     async function fetchData() {
         try {
@@ -169,4 +171,68 @@ export async function getUserInfo(){
       catch(e){
         alert('Could not log in')
       }
+}
+
+export async function followUser(user_id:string):Promise<boolean>{
+    const url = `http://localhost:3000/v1/follow`;
+    try{
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body:JSON.stringify({
+                user_id_id:user_id
+            })
+        })
+        let followed = false
+        if(res.status == 201){
+            followed = true
+        }
+        return followed
+    }
+    catch(e){
+        console.log("could not follow user")
+        return false
+    }  
+}
+
+export async function getComments(post_id: string, page: number): Promise<CommentData[]> {
+    const url = `http://localhost:3000/v1/comment/${post_id}?page=${page}`;
+    try {
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+        if (res.status === 200) {
+            const comments = await res.json();
+            return comments;
+        }
+        return [];
+    } catch (e) {
+        console.log("Error fetching comments");
+        return [];
+    }
+}
+
+export async function uploadComment(post_id: string, comment: string):Promise<boolean>{
+    const posted = await fetch('http://localhost:3000/v1/comment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            post_id: post_id,
+            content: comment
+        })
+    })
+    if(posted.status == 201){
+        return true
+    }
+    return false
 }

@@ -28,6 +28,7 @@ export default function Home() {
 
     const userInfo = useContext(UserContext)
     async function handleUploadPost(content:string, media_url:string|undefined){
+        console.log(userInfo)
         try{
             const posted = await uploadPost(content, media_url)
             const today = new Date();
@@ -37,9 +38,9 @@ export default function Home() {
             const formattedDate = `${year}-${month}-${day}`;
             if(posted){
                 const {post_id} = posted
-                const newPost = [<Post 
+                const newPost = [<Post
                 post_id={post_id} 
-                user_id={userInfo.user_id} 
+                user_id={userInfo.user_hex_id} 
                 media_url=''
                 username={userInfo.username} 
                 profile_pic_url={userInfo.profile_pic}
@@ -47,6 +48,7 @@ export default function Home() {
                 like_count={0}
                 comment_count={0}
                 date_created={formattedDate}
+                key={post_id}
                 />]
                 setPostCards(prev => newPost.concat(prev))
                 setErrorToUpload(false)
@@ -103,7 +105,6 @@ export default function Home() {
                 comment_count={post.comment_count}
                 is_liked={post.is_liked}
                 is_saved={post.is_saved}
-                is_following={post.is_following}
             />
         ));
         setPostCards(postss);

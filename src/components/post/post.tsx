@@ -1,6 +1,6 @@
 import './post.css';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import userPic from '../../assets/user.svg'
 import CommentSection from '../comment-section/comment-section.tsx';
 import LottiePlayer from '../lottie-player/lottie-player.tsx';
@@ -20,7 +20,6 @@ export type PostProps = {
     post_id: string
     is_liked?: number
     is_saved?:number
-    is_following?:number
 }
 export default function Post({
     post_id,
@@ -33,17 +32,17 @@ export default function Post({
     profile_pic_url, 
     user_id, 
     is_liked=0, 
-    is_saved=0, 
-    is_following=0}: PostProps){
+    is_saved=0 
+    }: PostProps){
     const [openComments, setOpenComments] = useState(false)
     const [isLiked, setIsLiked] = useState(is_liked)
     const [likeCount, setLikeCount] = useState(like_count)
     const [isSaved, setIsSaved] = useState(is_saved)
-    const [isFollowing, setIsfollowing] = useState(is_following)
     const date = new Date(date_created)
     const year = date.getUTCFullYear()
     const month = String(date.getUTCMonth() + 1).padStart(2, '0')
     const day = String(date.getUTCDate()).padStart(2, '0')
+    const navigate = useNavigate()
 
     async function handleLike(){
         try{
@@ -98,6 +97,7 @@ export default function Post({
             alert('error saving/removing post')
         }
     }
+    
     return(
         <article className="post">
             <header className="post-header">
@@ -105,10 +105,12 @@ export default function Post({
                 <Link to={`/user/${username}`}>
                     <span>{username}</span>
                 </Link>
-                <button className="user-follow-btn">{is_following == 0 ? 'Follow': 'Unfollow'}</button>
             </header>
-            <p className="post-content">{content}</p>
-            <span className="date">{`${year}-${month}-${day}`}</span>
+            <div className="post-content-container" onClick={() => navigate(`/post/${post_id}`)}>
+                <p className="post-content">{content}</p>
+                {media_url && <img className="post-media" src={media_url} alt="post media" />}
+                <span className="date">{`${year}-${month}-${day}`}</span>
+            </div>
             <div className="icons">
                 <div className="likes-icon">
                     <span className="num-of-likes">{likeCount}</span>
@@ -137,7 +139,7 @@ export default function Post({
                 />
             </div>
             <div className="line"></div>
-            {openComments && (<CommentSection closeComments={() => setOpenComments(false)} />)}
+            {openComments && (<CommentSection closeComments={() => setOpenComments(false)} post_id={post_id}/>)}
         </article>
     )
 }

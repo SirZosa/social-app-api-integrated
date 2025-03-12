@@ -1,102 +1,110 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import WriteComment from "../write-comment/write-comment";
-import userPic from '../../assets/user.svg'
-import back from '../../assets/back.svg'
+import userPic from '../../assets/user.svg';
+import back from '../../assets/back.svg';
 import Comment from "../comment/comment";
-import './comment-section.css'
+import { getComments, uploadComment } from "../../utils/utils";
+import './comment-section.css';
+
 type CommentSectionProps = {
-    closeComments: ()=>void;
+    closeComments: () => void;
+    post_id: string;
 }
-export default function CommentSection({closeComments}: CommentSectionProps){
+
+export type CommentData = {
+    comment_id: string;
+    user_id: string;
+    username: string;
+    profile_pic_url: string;
+    content: string;
+    date_created: string;
+    post_id: string;
+}
+
+export default function CommentSection({ closeComments, post_id }: CommentSectionProps) {
+    const [comments, setComments] = useState<CommentData[]>([]);
+    const [page, setPage] = useState(1);
     const [mounted, setMounted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const commentsRef = useRef<HTMLDivElement>(null);
+
+    async function fetchComments(){
+        if (!hasMore || isLoading) return;
+        setIsLoading(true);
+        try {
+            const newComments = await getComments(post_id, page);
+            
+            if (newComments.length === 0) {
+                setHasMore(false);
+            } else {
+                setComments(prev => [...prev, ...newComments]);
+                setPage(prev => prev + 1);
+            }
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
         setMounted(true);
         document.body.classList.add('body-no-scroll');
-        
-        // Cleanup: Remove the class when the component unmounts
-        return () => {
-          document.body.classList.remove('body-no-scroll');
-        };
-      }, [])
+        fetchComments();
+    }, []);
 
-      function handleClick(){
-        setMounted(false)
-        setTimeout(() => closeComments(), 300)
-      }
-    function uploadComment(comment: string){
-        fetch('http://localhost:3000/v1/comment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-                comment: comment
-            })
-        }).then((res)=>{
-            if(res.ok){
-                alert("Comment Uploaded");
-            }else{
-                alert("Comment Upload Failed");
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!commentsRef.current) return;
+            const { scrollTop, scrollHeight, clientHeight } = commentsRef.current;
+            if (scrollTop + clientHeight >= scrollHeight - 10 && !isLoading && hasMore) {
+                fetchComments(); // Fetch more posts when the user reaches the bottom
             }
-        })
+        };
+
+        commentsRef.current?.addEventListener('scroll', handleScroll);
+        return () => commentsRef.current?.removeEventListener('scroll', handleScroll);
+    }, [isLoading, hasMore]);
+
+    function handleClick() {
+        setMounted(false);
+        setTimeout(() => closeComments(), 300);
     }
-    return(
+
+    function handleUploadComment(comment: string) {
+        uploadComment(post_id, comment);
+        // You might want to refresh comments or optimistically update UI here
+    }
+
+    const commentsCards = comments.map((comment) => {
+        const date = new Date(comment.date_created);
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        
+        return (
+            <Comment
+                key={comment.comment_id}
+                imgSrc={comment.profile_pic_url ? comment.profile_pic_url : userPic}
+                username={comment.username}
+                comment={comment.content}
+                date={`${month}/${day}/${year}`}
+            />
+        );
+    });
+
+    return (
         <section className={`comment-section ${mounted ? 'mounted' : ''}`}>
             <button className="comments-close-btn" onClick={handleClick}>
                 <img src={back} alt="back button" className="close-btn-img" />
             </button>
-            <div className="comments">
-            <Comment imgSrc={userPic} username="ososa" comment="lorem impsum omar es el mejor de todo el universo digan lo que digan malditas putas" date="9:48 2/4/2025" />
-            <Comment
-            imgSrc={userPic}
-            username="johndoe"
-            comment="This is such an insightful post! Thanks for sharing."
-            date="10:15 3/4/2025"
-            />
-
-            <Comment
-            imgSrc={userPic}
-            username="techlover22"
-            comment="I completely agree with your points. Keep up the great work!"
-            date="14:30 4/4/2025"
-            />
-
-            <Comment
-            imgSrc={userPic}
-            username="coding_ninja"
-            comment="This tutorial saved me hours of work. You're a lifesaver!"
-            date="08:00 5/4/2025"
-            />
-
-            <Comment
-            imgSrc={userPic}
-            username="design_guru"
-            comment="Love the design tips! Can't wait to try them out in my next project."
-            date="19:45 6/4/2025"
-            />
-
-            <Comment
-            imgSrc={userPic}
-            username="travel_bug"
-            comment="Your travel stories are so inspiring. Where are you off to next?"
-            date="12:10 7/4/2025"
-            />
-            <Comment
-            imgSrc={userPic}
-            username="design_guru"
-            comment="Love the design tips! Can't wait to try them out in my next project."
-            date="19:45 6/4/2025"
-            />
-
-            <Comment
-            imgSrc={userPic}
-            username="travel_bug"
-            comment="Your travel stories are so inspiring. Where are you off to next?"
-            date="12:10 7/4/2025"
-            />
+            <div className="comments" ref={commentsRef}>
+                {commentsCards.length > 0 ? commentsCards : <p>No comments yet</p>}
+                {isLoading && <p className="loading-text">Loading more comments...</p>}
+                {!hasMore && comments.length > 0 && <p className="loading-text">No more comments to load.</p>}
             </div>
-            <WriteComment onSubmit={(comment: string) => uploadComment(comment)} />
+            <WriteComment onSubmit={(comment: string) => handleUploadComment(comment)} />
         </section>
-    )
+    );
 }
