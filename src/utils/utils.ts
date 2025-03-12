@@ -1,5 +1,5 @@
 import type {CommentData} from '../components/comment-section/comment-section'
-
+import type {PostProps} from '../components/post/post'
 export function getPosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
     async function fetchData() {
         try {
@@ -235,4 +235,25 @@ export async function uploadComment(post_id: string, comment: string):Promise<bo
         return true
     }
     return false
+}
+
+export async function getPost(post_id: string): Promise<PostProps | null> {
+    const url = `http://localhost:3000/v1/post/${post_id}`;
+    try {
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+        if (res.status === 200) {
+            const post = await res.json();
+            return post;
+        }
+        return null;
+    } catch (e) {
+        console.log("Error fetching post");
+        return null;
+    }
 }

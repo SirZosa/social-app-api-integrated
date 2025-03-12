@@ -1,58 +1,32 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { getPost, getComments } from '../../utils/utils';
 import Post from '../../components/post/post';
 import WriteComment from '../../components/write-comment/write-comment';
 import Comment from '../../components/comment/comment';
 import userPic from '../../assets/user.svg';
 import './post-page.css';
-
-type PostData = {
-    media_url: string;
-    username: string;
-    user_id: string;
-    profile_pic_url: string;
-    content: string;
-    date_created: string;
-    like_count: number;
-    comment_count: number;
-    post_id: string;
-    is_liked?: number;
-    is_saved?: number;
-};
-
-type CommentData = {
-    id: string;
-    user_id: string;
-    username: string;
-    profile_pic: string;
-    content: string;
-    created_at: string;
-};
+import type { PostProps } from '../../components/post/post';
+import type { CommentData } from '../../components/comment-section/comment-section';
 
 export default function PostPage() {
     const { postId } = useParams();
-    const [post, setPost] = useState<PostData | null>(null);
+    const [post, setPost] = useState<PostProps | null>(null);
     const [comments, setComments] = useState<CommentData[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchPostAndComments = async () => {
+            if (!postId) return;
             try {
                 // Fetch post data
-                const postRes = await fetch(`http://localhost:3000/v1/post/${postId}`, {
-                    credentials: 'include'
-                });
-                if (!postRes.ok) throw new Error('Failed to fetch post');
-                const postData = await postRes.json();
-                setPost(postData);
+                const postRes = await getPost(postId);
+                console.log(postRes);
+                setPost(postRes);
 
                 // Fetch comments
-                const commentsRes = await fetch(`http://localhost:3000/v1/comments/${postId}`, {
-                    credentials: 'include'
-                });
-                if (!commentsRes.ok) throw new Error('Failed to fetch comments');
-                const commentsData = await commentsRes.json();
-                setComments(commentsData);
+                const commentsRes = await getComments(postId, 1);
+                setComments(commentsRes);
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
@@ -107,11 +81,11 @@ export default function PostPage() {
                     <div className="comments-list">
                         {comments.map(comment => (
                             <Comment
-                                key={comment.id}
-                                imgSrc={comment.profile_pic || userPic}
+                                key={comment.comment_id}
+                                imgSrc={comment.profile_pic_url || userPic}
                                 username={comment.username}
                                 comment={comment.content}
-                                date={new Date(comment.created_at).toLocaleString()}
+                                date={new Date(comment.date_created).toLocaleString()}
                             />
                         ))}
                     </div>
