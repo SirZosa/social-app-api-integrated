@@ -7,6 +7,7 @@ import UserPage from './page/user-page/user-page'
 import Follow from './page/follow/follow'
 import SignUpForm from './page/signup/signupform'
 import LogIn from './page/login/login'
+import PostPage from './page/post-page/post-page'
 import './App.css'
 
 export type UserInfo = {
@@ -16,7 +17,7 @@ export type UserInfo = {
   last_name: string,
   profile_pic: string
   profile_background_pic: string,
-  user_id:string,
+  user_hex_id:string,
   username: string
 }
 
@@ -27,7 +28,7 @@ export const UserContext = createContext<UserInfo>({
   last_name: '',
   profile_pic: '',
   profile_background_pic: '',
-  user_id:'',
+  user_hex_id:'',
   username: ''
 })
 function App() {
@@ -38,7 +39,7 @@ function App() {
     last_name: '',
     profile_pic: '',
     profile_background_pic: '',
-    user_id:'',
+    user_hex_id:'',
     username: ''
   })
 
@@ -60,6 +61,7 @@ function App() {
             <Route path='*' element={<h1 style={{textAlign:'center'}}>404 Not Found</h1>} />
             <Route path='user/:id' element={<UserPage/>}/>
             <Route path='user/:id/follow' element={<Follow/>}/>
+            <Route path='post/:postId' element={<PostPage/>}/>
             <Route index element={<Home/>} />
             <Route path='/signup' element={<SignUpForm/>}/>
             <Route path='/login' element={<LogIn/>}/>
