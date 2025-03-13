@@ -69,6 +69,7 @@ export default function CommentSection({ closeComments, post_id }: CommentSectio
 
     function handleClick() {
         setMounted(false);
+        document.body.classList.remove('body-no-scroll');
         setTimeout(() => closeComments(), 300);
     }
 
@@ -78,20 +79,14 @@ export default function CommentSection({ closeComments, post_id }: CommentSectio
     }
 
     const commentsCards = comments.map((comment) => {
-        const date = new Date(comment.date_created);
-        const year = date.getUTCFullYear();
-        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(date.getUTCDate()).padStart(2, '0');
-        
-        return (
-            <Comment
+        return <Comment
                 key={comment.comment_id}
                 imgSrc={comment.profile_pic_url ? comment.profile_pic_url : userPic}
                 username={comment.username}
                 comment={comment.content}
-                date={`${month}/${day}/${year}`}
+                date={new Date(comment.date_created).toLocaleString()}
             />
-        );
+        ;
     });
 
     return (
