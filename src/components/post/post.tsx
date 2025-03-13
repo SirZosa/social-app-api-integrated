@@ -38,10 +38,6 @@ export default function Post({
     const [isLiked, setIsLiked] = useState(is_liked)
     const [likeCount, setLikeCount] = useState(like_count)
     const [isSaved, setIsSaved] = useState(is_saved)
-    const date = new Date(date_created)
-    const year = date.getUTCFullYear()
-    const month = String(date.getUTCMonth() + 1).padStart(2, '0')
-    const day = String(date.getUTCDate()).padStart(2, '0')
     const navigate = useNavigate()
 
     async function handleLike(){
@@ -109,7 +105,7 @@ export default function Post({
             <div className="post-content-container" onClick={() => navigate(`/post/${post_id}`)}>
                 <p className="post-content">{content}</p>
                 {media_url && <img className="post-media" src={media_url} alt="post media" />}
-                <span className="date">{`${year}-${month}-${day}`}</span>
+                <span className="date">{new Date(date_created).toLocaleString()}</span>
             </div>
             <div className="icons">
                 <div className="likes-icon">
