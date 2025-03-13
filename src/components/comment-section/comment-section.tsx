@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import WriteComment from "../write-comment/write-comment";
 import userPic from '../../assets/user.svg';
 import back from '../../assets/back.svg';
 import Comment from "../comment/comment";
 import { getComments, uploadComment } from "../../utils/utils";
+import { UserContext } from "../../App";
 import './comment-section.css';
 
 type CommentSectionProps = {
@@ -28,6 +29,7 @@ export default function CommentSection({ closeComments, post_id }: CommentSectio
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const commentsRef = useRef<HTMLDivElement>(null);
+    const userInfo = useContext(UserContext)
 
     async function fetchComments(){
         if (!hasMore || isLoading) return;
@@ -73,9 +75,21 @@ export default function CommentSection({ closeComments, post_id }: CommentSectio
         setTimeout(() => closeComments(), 300);
     }
 
-    function handleUploadComment(comment: string) {
-        uploadComment(post_id, comment);
+    async function handleUploadComment(comment: string) {
+        const comment_id = await uploadComment(post_id, comment);
         // You might want to refresh comments or optimistically update UI here
+        if(comment_id){
+            const newComment = {
+                comment_id,
+                user_id: userInfo.user_hex_id,
+                username: userInfo.username,
+                profile_pic_url: userInfo.profile_pic,
+                content: comment,
+                date_created: new Date().toISOString(),
+                post_id: post_id
+            }
+            setComments(prev => [newComment].concat(prev));
+        }
     }
 
     const commentsCards = comments.map((comment) => {

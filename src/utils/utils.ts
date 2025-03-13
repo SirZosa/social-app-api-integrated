@@ -219,7 +219,7 @@ export async function getComments(post_id: string, page: number): Promise<Commen
     }
 }
 
-export async function uploadComment(post_id: string, comment: string):Promise<boolean>{
+export async function uploadComment(post_id: string, comment: string):Promise<string>{
     const posted = await fetch('http://localhost:3000/v1/comment', {
         method: 'POST',
         headers: {
@@ -232,9 +232,10 @@ export async function uploadComment(post_id: string, comment: string):Promise<bo
         })
     })
     if(posted.status == 201){
-        return true
+        const comment_id = await posted.json()
+        return comment_id
     }
-    return false
+    return ''
 }
 
 export async function getPost(post_id: string): Promise<PostProps | null> {

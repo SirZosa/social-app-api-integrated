@@ -47,7 +47,6 @@ function App() {
     async function getInfo(){
       const info = await getUserInfo()
       if(info){
-        console.log(info)
         setUserInfo(info)
       }
     }
