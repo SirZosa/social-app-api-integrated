@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef, useCallback } from 'react';
 import { useParams } from 'react-router';
 import { getPost, getComments } from '../../utils/utils';
 import { UserContext } from '../../App';
@@ -15,19 +15,23 @@ export default function PostPage() {
     const [post, setPost] = useState<PostProps | null>(null);
     const [comments, setComments] = useState<CommentData[]>([]);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const commentsRef = useRef<HTMLDivElement>(null);
     const userInfo = useContext(UserContext);
+
+    // Fetch initial post and comments
     useEffect(() => {
         const fetchPostAndComments = async () => {
             if (!postId) return;
             try {
-                // Fetch post data
                 const postRes = await getPost(postId);
-                console.log(postRes)
                 setPost(postRes);
 
-                // Fetch comments
                 const commentsRes = await getComments(postId, 1);
                 setComments(commentsRes);
+                setPage(2); // Set next page to 2 after initial load
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
@@ -38,6 +42,46 @@ export default function PostPage() {
         fetchPostAndComments();
     }, [postId]);
 
+    // Memoized fetch comments function
+    const fetchComments = useCallback(async () => {
+        if (!hasMore || isLoading || !postId) return;
+        setIsLoading(true);
+        
+        try {
+            const newComments = await getComments(postId, page);
+            
+            if (newComments.length === 0) {
+                setHasMore(false);
+            } else {
+                setComments(prev => [...prev, ...newComments]);
+                setPage(prev => prev + 1);
+            }
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [page, hasMore, isLoading, postId]);
+
+    // Scroll event handler
+    useEffect(() => {
+        const commentsContainer = commentsRef.current;
+        if (!commentsContainer) return;
+
+        const handleScroll = () => {
+            const buffer = 100; // pixels from bottom to trigger load
+            const { scrollTop, scrollHeight, clientHeight } = commentsContainer;
+            
+            if (scrollHeight - (scrollTop + clientHeight) < buffer && !isLoading && hasMore) {
+                fetchComments();
+            }
+        };
+
+        commentsContainer.addEventListener('scroll', handleScroll);
+        return () => commentsContainer.removeEventListener('scroll', handleScroll);
+    }, [isLoading, hasMore, fetchComments]);
+
+    // Handle new comment submission
     const handleNewComment = async (comment: string) => {
         try {
             const response = await fetch('http://localhost:3000/v1/comment', {
@@ -57,7 +101,6 @@ export default function PostPage() {
             const newComment = await response.json();
             setComments(prev => [newComment, ...prev]);
             
-            // Update comment count in post
             if (post) {
                 setPost({
                     ...post,
@@ -79,7 +122,7 @@ export default function PostPage() {
                 <Post {...post} logged_user_id={userInfo.user_hex_id} />
                 <div className="post-page-comments">
                     <WriteComment onSubmit={handleNewComment} />
-                    <div className="comments-list">
+                    <div className="comments-list" ref={commentsRef}>
                         {comments.map(comment => (
                             <Comment
                                 key={comment.comment_id}
@@ -89,6 +132,11 @@ export default function PostPage() {
                                 date={new Date(comment.date_created).toLocaleString()}
                             />
                         ))}
+                        {isLoading && (
+                            <div className="loading-indicator">
+                                Loading more comments...
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
