@@ -1,0 +1,6 @@
+.post-for-page {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+  }
+  

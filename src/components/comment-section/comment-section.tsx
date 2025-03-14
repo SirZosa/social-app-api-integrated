@@ -77,7 +77,6 @@ export default function CommentSection({ closeComments, post_id }: CommentSectio
 
     async function handleUploadComment(comment: string) {
         const comment_id = await uploadComment(post_id, comment);
-        // You might want to refresh comments or optimistically update UI here
         if(comment_id){
             const newComment = {
                 comment_id,

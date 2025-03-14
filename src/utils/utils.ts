@@ -183,7 +183,7 @@ export async function followUser(user_id:string):Promise<boolean>{
             },
             credentials: 'include',
             body:JSON.stringify({
-                user_id_id:user_id
+                followee_id:user_id
             })
         })
         let followed = false
@@ -194,6 +194,31 @@ export async function followUser(user_id:string):Promise<boolean>{
     }
     catch(e){
         console.log("could not follow user")
+        return false
+    }  
+}
+
+export async function unfollowUser(user_id:string):Promise<boolean>{
+    const url = `http://localhost:3000/v1/follow`;
+    try{
+        const res = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body:JSON.stringify({
+                followee_id:user_id
+            })
+        })
+        let unfollowed = false
+        if(res.status == 201){
+            unfollowed = true
+        }
+        return unfollowed
+    }
+    catch(e){
+        console.log("could not unfollow user")
         return false
     }  
 }

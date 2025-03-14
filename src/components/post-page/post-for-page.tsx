@@ -1,13 +1,12 @@
-import './post.css';
+import './post-for-page.css';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import userPic from '../../assets/user.svg'
-import CommentSection from '../comment-section/comment-section.tsx';
 import LottiePlayer from '../lottie-player/lottie-player.tsx';
 import heart from '../../assets/heart.json';
 import save from '../../assets/save.json';
 import comment from '../../assets/comment.json';
-import { likePost, dislikePost, savePost, removePost } from '../../utils/utils.ts';
+import { likePost, dislikePost, savePost, removePost, followUser, unfollowUser } from '../../utils/utils.ts';
 export type PostProps = {
     media_url: string;
     username: string;
@@ -20,6 +19,8 @@ export type PostProps = {
     post_id: string
     is_liked?: number
     is_saved?:number
+    is_following?: number
+    logged_user_id?: string
 }
 export default function Post({
     post_id,
@@ -32,12 +33,14 @@ export default function Post({
     profile_pic_url, 
     user_id, 
     is_liked=0, 
-    is_saved=0 
+    is_saved=0,
+    is_following=0,
+    logged_user_id
     }: PostProps){
-    const [openComments, setOpenComments] = useState(false)
     const [isLiked, setIsLiked] = useState(is_liked)
     const [likeCount, setLikeCount] = useState(like_count)
     const [isSaved, setIsSaved] = useState(is_saved)
+    const [isFollowing, setIsFollowing] = useState(is_following)
     const navigate = useNavigate()
 
     async function handleLike(){
@@ -93,14 +96,35 @@ export default function Post({
             alert('error saving/removing post')
         }
     }
+
+    async function handleFollow(){
+        try{
+            if(isFollowing){
+                const unfollowed = await unfollowUser(user_id)
+                if(unfollowed){
+                    setIsFollowing(0)
+                }
+            }
+            else{
+                const followed = await followUser(user_id)
+                if(followed){
+                    setIsFollowing(1)
+                }
+            }
+        }
+        catch(e){
+            alert('error following/unfollowing user')
+        }
+    }
     
     return(
-        <article className="post">
+        <article className="post-for-page">
             <header className="post-header">
                 <img src={profile_pic_url ?? userPic} alt="profile pic" />
                 <Link to={`/user/${user_id}`}>
                     <span>{username}</span>
                 </Link>
+                {logged_user_id !== user_id ? <button className="user-follow-btn" onClick={handleFollow}>{isFollowing == 1 ? 'Unfollow' : 'Follow'}</button>: null}
             </header>
             <div className="post-content-container" onClick={() => navigate(`/post/${post_id}`)}>
                 <p className="post-content">{content}</p>
@@ -122,7 +146,7 @@ export default function Post({
                 </div>
                 <div className="comments-icon">
                     <span className='num-of-comments'>{comment_count}</span>
-                    <LottiePlayer animationDataSrc={comment} startFrame={26} endFrame={0} isActive={false} width={40} height={40} autoplay={true} loop={true} onClick={() => setOpenComments(true)}/>
+                    <LottiePlayer animationDataSrc={comment} startFrame={26} endFrame={0} isActive={false} width={40} height={40} autoplay={true} loop={true}/>
                 </div>
                 <LottiePlayer 
                     animationDataSrc={save}
@@ -135,7 +159,6 @@ export default function Post({
                 />
             </div>
             <div className="line"></div>
-            {openComments && (<CommentSection closeComments={() => setOpenComments(false)} post_id={post_id}/>)}
         </article>
     )
 }

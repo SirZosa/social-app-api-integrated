@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router';
 import { getPost, getComments } from '../../utils/utils';
-import Post from '../../components/post/post';
+import { UserContext } from '../../App';
+import Post from '../../components/post-page/post-for-page';
 import WriteComment from '../../components/write-comment/write-comment';
 import Comment from '../../components/comment/comment';
 import userPic from '../../assets/user.svg';
@@ -14,14 +15,14 @@ export default function PostPage() {
     const [post, setPost] = useState<PostProps | null>(null);
     const [comments, setComments] = useState<CommentData[]>([]);
     const [loading, setLoading] = useState(true);
-
+    const userInfo = useContext(UserContext);
     useEffect(() => {
         const fetchPostAndComments = async () => {
             if (!postId) return;
             try {
                 // Fetch post data
                 const postRes = await getPost(postId);
-                console.log(postRes);
+                console.log(postRes)
                 setPost(postRes);
 
                 // Fetch comments
@@ -75,7 +76,7 @@ export default function PostPage() {
     return (
         <div className="post-page">
             <div className="post-page-content">
-                <Post {...post} />
+                <Post {...post} logged_user_id={userInfo.user_hex_id} />
                 <div className="post-page-comments">
                     <WriteComment onSubmit={handleNewComment} />
                     <div className="comments-list">
