@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, useRef, useCallback } from 'react';
 import { useParams } from 'react-router';
-import { getPost, getComments } from '../../utils/utils';
+import { getPost, getComments, uploadComment } from '../../utils/utils';
 import { UserContext } from '../../App';
 import Post from '../../components/post-page/post-for-page';
 import WriteComment from '../../components/write-comment/write-comment';
@@ -83,22 +83,21 @@ export default function PostPage() {
 
     // Handle new comment submission
     const handleNewComment = async (comment: string) => {
+        if (!postId) return;
         try {
-            const response = await fetch('http://localhost:3000/v1/comment', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    post_id: postId,
-                    content: comment
-                })
-            });
+            const response = await uploadComment(postId, comment)
+            if (!response) throw new Error('Failed to post comment');
 
-            if (!response.ok) throw new Error('Failed to post comment');
-
-            const newComment = await response.json();
+            const newComment: CommentData = {
+                comment_id: response,
+                user_id: userInfo.user_hex_id,
+                username: userInfo.username,
+                profile_pic_url: userInfo.profile_pic,
+                content: comment,
+                date_created: new Date().toISOString(),
+                post_id: postId
+            }
+            
             setComments(prev => [newComment, ...prev]);
             
             if (post) {
