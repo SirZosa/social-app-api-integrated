@@ -48,6 +48,10 @@
     margin-bottom: 10px;
     line-height: 1.5rem;
   }
+
+  .post-content-container{
+    cursor: pointer;
+  }
   
   .date {
     font-size: 14px;

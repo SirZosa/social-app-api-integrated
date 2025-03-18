@@ -41,7 +41,7 @@ export default function UserPage(){
       ]);
       let postss = posts.map(post =>{
         return(
-            <Post imgSrc={post.imgSrc} username={post.username} content={post.content} date={post.date} key={post.username}/>
+            <Post profile_pic_url={post.imgSrc} username={post.username} content={post.content} date_created={post.date} key={post.username}/>
         )
       })
     return(
