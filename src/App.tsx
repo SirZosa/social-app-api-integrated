@@ -9,6 +9,7 @@ import SignUpForm from './page/signup/signupform'
 import LogIn from './page/login/login'
 import LogOut from './page/logout/logout'
 import PostPage from './page/post-page/post-page'
+import SavedPosts from './page/saved-posts/saved-posts'
 import './App.css'
 
 export type UserInfo = {
@@ -43,6 +44,7 @@ function App() {
             <Route path='user/:id' element={<UserPage/>}/>
             <Route path='user/:id/follow' element={<Follow/>}/>
             <Route path='post/:postId' element={<PostPage/>}/>
+            <Route path='post/saved' element={<SavedPosts/>}/>
             <Route index element={<Home/>} />
             <Route path='/signup' element={<SignUpForm/>}/>
             <Route path='/login' element={<LogIn/>}/>

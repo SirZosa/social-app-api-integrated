@@ -42,6 +42,28 @@ export async function getFolloweePosts(page: number, next: (postsData: { posts: 
         next({ posts: [], hasMore: false }); // No more posts available
     }
 }
+export async function getSavedPosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
+    try {
+        const url = `http://localhost:3000/v1/posts/saved?page=${page}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+        if(response.status == 200){
+            const data = await response.json()
+            next(data)
+        }
+        else if(response.status == 401){
+            next({ posts: [], hasMore: false }); // No more posts available
+        }
+    } catch (e) {
+        console.error('Error fetching posts:', e);
+        next({ posts: [], hasMore: false }); // No more posts available
+    }
+}
 
 export async function likePost(post_id:string):Promise<boolean>{
     const url = `http://localhost:3000/v1/like`;
