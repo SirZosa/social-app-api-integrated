@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { getFolloweePosts } from '../utils/utils';
 import type { PostProps } from '../components/post/post';
 
@@ -14,7 +14,7 @@ export function useFolloweePosts() {
     const [page, setPage] = useState(cache.page);
     const [isFolloweeLoading, setIsFolloweeLoading] = useState(false);
     const [hasMore, setHasMore] = useState(cache.hasMore);
-    const isMounted = useRef(false);
+    const [followeeActive, setFolloweeActive] = useState(false);
 
     function addPosts(newPosts: PostProps[]) {
         setFollowePosts((prev: PostProps[]) => {
@@ -49,18 +49,15 @@ export function useFolloweePosts() {
     }
 
     useEffect(() => {
-        if (!isMounted.current) {
-            isMounted.current = true;
-            if (followePosts.length === 0) {
-                fetchMorePosts();
-            }
+        if (followePosts.length === 0 && followeeActive) {
+            fetchMorePosts();
         }
-    }, []);
+    }, [followeeActive]);
 
     useEffect(() => {
         let isThrottled = false;
         const handleScroll = () => {
-            if (isThrottled) return;
+            if (isThrottled || !followeeActive) return;
             isThrottled = true;
             setTimeout(()=>{
                 const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
@@ -73,7 +70,7 @@ export function useFolloweePosts() {
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [isFolloweeLoading, hasMore]);
+    }, [isFolloweeLoading, hasMore, followeeActive]);
 
     return {
         followePosts,
@@ -90,6 +87,7 @@ export function useFolloweePosts() {
             }
         },
         isFolloweeLoading,
-        hasMore
+        hasMore,
+        setFolloweeActive
     };
 }

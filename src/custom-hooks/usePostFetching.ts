@@ -14,6 +14,7 @@ export function usePostFetching() {
     const [page, setPage] = useState(cache.page);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(cache.hasMore);
+    const [active, setActive] = useState(false);
 
     function addPosts(newPosts: PostProps[]) {
         setPosts((prev: PostProps[]) => {
@@ -52,30 +53,29 @@ export function usePostFetching() {
     };
 
     useEffect(() => {
-        if (posts.length === 0) {
+        if (posts.length === 0 && active) {
             fetchMorePosts();
         }
-    }, []);
+    }, [active]);
 
     useEffect(() => {
         let isThrottled = false;
         const handleScroll = () => {
-            if (isThrottled) return;
+            if (isThrottled || !active) return;
             isThrottled = true;
 
             setTimeout(() => {
                 const { scrollTop, scrollHeight, clientHeight} = document.documentElement;
                 if (scrollTop + clientHeight >= scrollHeight - 10 && !isLoading && hasMore) {
-                    console.log('triggered');
                     fetchMorePosts();
                 }
                 isThrottled = false;
-            }, 250); // Throttle for 500ms
+            }, 250);
         };
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [isLoading, hasMore]);
+    }, [active, isLoading, hasMore]);
 
     return {
         posts,
@@ -92,6 +92,7 @@ export function usePostFetching() {
             }
         },
         isLoading,
-        hasMore
+        hasMore, 
+        setActive
     };
 }

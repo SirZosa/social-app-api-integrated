@@ -26,6 +26,7 @@ export default function LogIn() {
         })})
         if(res.status == 200){
           navigate('/')
+          window.location.reload();
         }
     }
     catch(e){

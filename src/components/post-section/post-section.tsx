@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Post from '../post/post';
 import SkeletonComponent from '../skeleton/skeleton-component';
 import PostUploader from '../upload-post/upload-post';
@@ -11,9 +11,9 @@ import './post-section.css';
 
 export default function PostSection({type}: {type: string}) {
     const [errorToUpload, setErrorToUpload] = useState(false);
-    const { posts, setPosts, isLoading } = usePostFetching();
+    const { posts, setPosts, isLoading, setActive } = usePostFetching();
     const { followePosts, isFolloweeLoading } = useFolloweePosts();
-    
+    const userInfo = useContext(UserContext);
     const placeHolder = [
         <SkeletonComponent key={1} variant="post" />,
         <SkeletonComponent key={2} variant="post" />,
@@ -21,8 +21,10 @@ export default function PostSection({type}: {type: string}) {
         <SkeletonComponent key={4} variant="post" />,
         <SkeletonComponent key={5} variant="post" />
     ];
-
-    const userInfo = useContext(UserContext);
+    
+    useEffect(() => {
+        setActive(type !== 'following');
+    }, [type]);
 
     async function handleUploadPost(content: string, media_url: string | undefined) {
         try {
@@ -33,7 +35,7 @@ export default function PostSection({type}: {type: string}) {
             const day = String(today.getDate()).padStart(2, '0');
             const formattedDate = `${year}-${month}-${day}`;
             
-            if (posted) {
+            if (posted && userInfo) {
                 const { post_id } = posted;
                 const newPost: PostProps = {
                     post_id,
@@ -88,11 +90,13 @@ export default function PostSection({type}: {type: string}) {
         return renderPosts(currentPosts);
     };
 
+    const content = type === '' && posts.length === 0 ? placeHolder : type === 'following' ? followePosts.length === 0 ? placeHolder : renderContent() : renderContent();
+
     return (
         <div className="posts-section">
             {type !== 'following' && <PostUploader next={handleUploadPost} />}
             {errorToUpload && <p style={{textAlign:'center', color:"red", marginBottom:"1rem"}}>Error, could not be posted.</p>}
-            {renderContent()}
+            {content}
             {isLoading || isFolloweeLoading && <SkeletonComponent variant="post" />}
         </div>
     );

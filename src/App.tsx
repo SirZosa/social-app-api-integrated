@@ -7,6 +7,7 @@ import UserPage from './page/user-page/user-page'
 import Follow from './page/follow/follow'
 import SignUpForm from './page/signup/signupform'
 import LogIn from './page/login/login'
+import LogOut from './page/logout/logout'
 import PostPage from './page/post-page/post-page'
 import './App.css'
 
@@ -21,28 +22,9 @@ export type UserInfo = {
   username: string
 }
 
-export const UserContext = createContext<UserInfo>({
-  date_created:'',
-  email: '',
-  first_name: '',
-  last_name: '',
-  profile_pic: '',
-  profile_background_pic: '',
-  user_hex_id:'',
-  username: ''
-})
+export const UserContext = createContext<UserInfo | null>(null)
 function App() {
-  const [userInfo, setUserInfo] = useState<UserInfo>({
-    date_created:'',
-    email: '',
-    first_name: '',
-    last_name: '',
-    profile_pic: '',
-    profile_background_pic: '',
-    user_hex_id:'',
-    username: ''
-  })
-
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
   useEffect(()=>{
     async function getInfo(){
       const info = await getUserInfo()
@@ -64,6 +46,7 @@ function App() {
             <Route index element={<Home/>} />
             <Route path='/signup' element={<SignUpForm/>}/>
             <Route path='/login' element={<LogIn/>}/>
+            <Route path='/logout' element={<LogOut/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

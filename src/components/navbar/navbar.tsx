@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
+import { UserContext } from "../../App"
 import { NavLink, useNavigate } from "react-router"
 import Burger from "../burger-icon/burger"
 import logo from "../../assets/logo.png"
@@ -11,6 +12,7 @@ import "./navbar.css"
 export default function Navbar(){
     const [open, setOpen] = useState<boolean>(false);
     const [notificationsOpen, setNotificationsOpen] = useState(false)
+    const userInfo = useContext(UserContext);
     const navigate = useNavigate();
     function onClickProp(){
         setOpen(prev => !prev);
@@ -25,9 +27,10 @@ export default function Navbar(){
                 <img src={logo} className="logo" alt="loco icon" onClick={()=> navigate("/")} />
                 <div className="nav-links">
                     <NavLink className={({isActive}) => isActive ? "link-active" : ""} to="/">HOME</NavLink>
-                    <NavLink className={({isActive}) => isActive ? "link-active" : ""} to="/login">LogIn</NavLink>
-                    <NavLink className={({isActive}) => isActive ? "link-active" : ""} to="signup">Sign UP</NavLink>
-                    <NavLink className={({isActive}) => isActive ? "link-active" : ""} to="other">OTHER</NavLink>
+                    {!userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} to="/login">LogIn</NavLink>}
+                    {!userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} to="signup">Sign UP</NavLink>}
+                    {userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} to={`/user/${userInfo.user_hex_id}`}>Profile</NavLink>}
+                    {userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} to="/logout">Log Out</NavLink>}
                     <button className="nav-links-notification-button" onClick={()=>handleNotificationBtn()}><img src={notification} alt="notification icon" /><div className="active-notification"></div></button>
                 </div>
                 <div className="burger-icon">
@@ -38,9 +41,10 @@ export default function Navbar(){
             <div className={`nav-container ${open ? 'open' : 'close'}`}>
                 <div className="nav-container-links">
                     <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to="/">HOME</NavLink>
-                    <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to="/login">LOGIN</NavLink>
-                    <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to="signup">SIGN UP</NavLink>
-                    <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to="other">OTHER</NavLink>
+                    {!userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to="/login">LOGIN</NavLink>}
+                    {!userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to="signup">SIGN UP</NavLink>}
+                    {userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to={`/user/${userInfo.user_hex_id}`}>Profile</NavLink>}
+                    {userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to="/logout">Log Out</NavLink>}
                 </div>
                 <div className="nav-socials">
                     <a href="#"><img src={ig} alt="instagram logo" /></a>

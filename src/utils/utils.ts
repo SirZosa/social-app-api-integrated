@@ -297,3 +297,23 @@ export async function getPost(post_id: string): Promise<PostProps | null> {
         return null;
     }
 }
+
+export async function logout(): Promise<boolean> {
+    const url = 'http://localhost:3000/v1/logout';
+    try {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+        if (res.status === 200) {
+            return true;
+        }
+        return false;
+    } catch (e) {
+        console.log("Error logging out");
+        return false;
+    }
+}
