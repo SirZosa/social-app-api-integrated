@@ -1,0 +1,11 @@
+.posts-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 3rem;
+    margin-top: 1.5rem;
+    gap: 1rem;
+    width: 95%;
+    margin: 0 auto;
+    position: relative;
+}

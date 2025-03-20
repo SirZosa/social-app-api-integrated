@@ -1,32 +1,46 @@
 import type {CommentData} from '../components/comment-section/comment-section'
 import type {PostProps} from '../components/post/post'
-export function getPosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
-    async function fetchData() {
-        try {
-            const url = `http://localhost:3000/v1/posts?page=${page}`;
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include'
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        console.error(data.error);
-                        next({ posts: [], hasMore: false }); // No more posts available
-                    } else {
-                        next(data); // Pass the posts and hasMore flag to the callback
-                    }
-                })
-                .catch(err => console.log(err));
-        } catch (e) {
-            console.error('Error fetching posts:', e);
+export async function getPosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
+    try {
+        const url = `http://localhost:3000/v1/posts?page=${page}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+        if(response.status == 200){
+            const data = await response.json()
+            next(data)
+        }
+    } catch (e) {
+        console.error('Error fetching posts:', e);
+        next({ posts: [], hasMore: false }); // No more posts available
+    }
+} 
+
+export async function getFolloweePosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
+    try {
+        const url = `http://localhost:3000/v1/followeePosts?page=${page}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+        if(response.status == 200){
+            const data = await response.json()
+            next(data)
+        }
+        else if(response.status == 401){
             next({ posts: [], hasMore: false }); // No more posts available
         }
+    } catch (e) {
+        console.error('Error fetching posts:', e);
+        next({ posts: [], hasMore: false }); // No more posts available
     }
-    fetchData();
 }
 
 export async function likePost(post_id:string):Promise<boolean>{
