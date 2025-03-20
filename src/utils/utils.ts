@@ -22,7 +22,7 @@ export async function getPosts(page: number, next: (postsData: { posts: [], hasM
 
 export async function getFolloweePosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
     try {
-        const url = `http://localhost:3000/v1/followeePosts?page=${page}`;
+        const url = `http://localhost:3000/v1/posts/following?page=${page}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
