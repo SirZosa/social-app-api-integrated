@@ -12,7 +12,7 @@ import './post-section.css';
 export default function PostSection({type}: {type: string}) {
     const [errorToUpload, setErrorToUpload] = useState(false);
     const { posts, setPosts, isLoading, setActive } = usePostFetching();
-    const { followePosts, isFolloweeLoading } = useFolloweePosts();
+    const { followePosts, isFolloweeLoading, setFolloweeActive } = useFolloweePosts();
     const userInfo = useContext(UserContext);
     const placeHolder = [
         <SkeletonComponent key={1} variant="post" />,
@@ -24,6 +24,7 @@ export default function PostSection({type}: {type: string}) {
     
     useEffect(() => {
         setActive(type !== 'following');
+        setFolloweeActive(type === 'following');
     }, [type]);
 
     async function handleUploadPost(content: string, media_url: string | undefined) {
