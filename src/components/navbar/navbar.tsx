@@ -30,6 +30,7 @@ export default function Navbar(){
                     {!userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} to="/login">LogIn</NavLink>}
                     {!userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} to="signup">Sign UP</NavLink>}
                     {userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} to={`/user/${userInfo.user_hex_id}`}>Profile</NavLink>}
+                    {userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} to={`/posts/saved`}>Saved Posts</NavLink>}
                     {userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} to="/logout">Log Out</NavLink>}
                     <button className="nav-links-notification-button" onClick={()=>handleNotificationBtn()}><img src={notification} alt="notification icon" /><div className="active-notification"></div></button>
                 </div>
@@ -44,6 +45,7 @@ export default function Navbar(){
                     {!userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to="/login">LOGIN</NavLink>}
                     {!userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to="signup">SIGN UP</NavLink>}
                     {userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to={`/user/${userInfo.user_hex_id}`}>Profile</NavLink>}
+                    {userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to={`/posts/saved`}>Saved Posts</NavLink>}
                     {userInfo && <NavLink className={({isActive}) => isActive ? "link-active" : ""} onClick={()=> setOpen(false)} to="/logout">Log Out</NavLink>}
                 </div>
                 <div className="nav-socials">

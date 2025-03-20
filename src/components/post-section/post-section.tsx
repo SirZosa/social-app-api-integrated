@@ -91,7 +91,7 @@ export default function PostSection({type}: {type: string}) {
         return renderPosts(currentPosts);
     };
 
-    const content = type === '' && posts.length === 0 ? placeHolder : type === 'following' ? followePosts.length === 0 ? placeHolder : renderContent() : renderContent();
+    const content = type === '' && posts.length === 0 && isLoading ? placeHolder : type === 'following' && followePosts.length === 0 && isFolloweeLoading ? placeHolder : renderContent();
 
     return (
         <div className="posts-section">

@@ -44,7 +44,7 @@ function App() {
             <Route path='user/:id' element={<UserPage/>}/>
             <Route path='user/:id/follow' element={<Follow/>}/>
             <Route path='post/:postId' element={<PostPage/>}/>
-            <Route path='post/saved' element={<SavedPosts/>}/>
+            <Route path='posts/saved' element={<SavedPosts/>}/>
             <Route index element={<Home/>} />
             <Route path='/signup' element={<SignUpForm/>}/>
             <Route path='/login' element={<LogIn/>}/>

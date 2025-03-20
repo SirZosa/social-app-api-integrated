@@ -45,11 +45,11 @@ export default function SavedPosts() {
         return renderPosts(savedPosts);
     };
 
-    const content = savedPosts.length === 0 ? placeHolder : renderContent()
+    const content = isSaveLoading && savedPosts.length === 0 ? placeHolder : renderContent()
 
     return (
         <div className="posts-section">
-            <h2>Saved Posts</h2>
+            <h2 style={{textAlign: 'center'}}>Saved Posts</h2>
             {content}
             {isSaveLoading && <SkeletonComponent variant="post" />}
         </div>
