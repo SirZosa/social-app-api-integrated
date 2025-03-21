@@ -26,6 +26,7 @@
 }
 
 .user-follow-info p{
+    padding: 5px 0;
     font-size: 14px;
     width: 33%;
     text-align: center;

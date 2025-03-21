@@ -1,5 +1,6 @@
 import type {CommentData} from '../components/comment-section/comment-section'
 import type {PostProps} from '../components/post/post'
+import  {ProfileProps} from '../interfaces/interfaces'
 export async function getPosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
     try {
         const url = `http://localhost:3000/v1/posts?page=${page}`;
@@ -337,5 +338,26 @@ export async function logout(): Promise<boolean> {
     } catch (e) {
         console.log("Error logging out");
         return false;
+    }
+}
+
+export async function getProfile(user_hex_id: string): Promise<ProfileProps | null> {
+    const url = `http://localhost:3000/v1/profile/${user_hex_id}`;
+    try {
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+        if (res.status === 200) {
+            const profile = await res.json();
+            return profile;
+        }
+        return null;
+    } catch (e) {
+        console.log("Error fetching profile");
+        return null;
     }
 }

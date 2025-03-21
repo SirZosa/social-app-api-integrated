@@ -87,7 +87,7 @@ export default function PostPage() {
         try {
             const response = await uploadComment(postId, comment)
             if (!response) throw new Error('Failed to post comment');
-
+            if (!userInfo) return;
             const newComment: CommentData = {
                 comment_id: response,
                 user_id: userInfo.user_hex_id,
@@ -118,7 +118,7 @@ export default function PostPage() {
     return (
         <div className="post-page">
             <div className="post-page-content">
-                <Post {...post} logged_user_id={userInfo.user_hex_id} />
+                <Post {...post} logged_user_id={userInfo?.user_hex_id || undefined} />
                 <div className="post-page-comments">
                     <WriteComment onSubmit={handleNewComment} />
                     <div className="comments-list" ref={commentsRef}>
