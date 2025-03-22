@@ -361,3 +361,23 @@ export async function getProfile(user_hex_id: string): Promise<ProfileProps | nu
         return null;
     }
 }
+
+export async function getProfilePosts(user_hex_id: string, page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
+    try {
+        const url = `http://localhost:3000/v1/profile/${user_hex_id}/posts?page=${page}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+        if(response.status == 200){
+            const data = await response.json()
+            next(data)
+        }
+    } catch (e) {
+        console.error('Error fetching posts:', e);
+        next({ posts: [], hasMore: false }); // No more posts available
+    }
+}

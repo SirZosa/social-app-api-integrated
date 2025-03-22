@@ -1,14 +1,17 @@
 import { useParams, Link } from "react-router";
 import { useState, useContext, useEffect } from 'react';
+import Post from '../../components/post/post';
 import user from '../../assets/user.svg';
 import bg from '../../assets/3001090.jpg'
 import { followUser, unfollowUser } from '../../utils/utils';
 import './user-page.css'
 import { useProfile } from '../../custom-hooks/useProfile';
+import { useProfilePosts } from '../../custom-hooks/useProfilePosts';
 import {UserContext} from '../../App';
   export default function UserPage(){
     const { id } = useParams();
     const { profile, isLoading } = useProfile(id!);
+    const { profilePosts } = useProfilePosts(id!);
     const [isFollowing, setIsFollowing] = useState(false);
     const userInfo = useContext(UserContext);
 
@@ -54,7 +57,9 @@ import {UserContext} from '../../App';
             </div>
             <div className="user-line"></div>
             <section className="user-posts">
-            
+              {profilePosts.map((post) => (
+                <Post key={post.post_id} {...post} />
+              ))}
             </section>
         </main>
     )

@@ -77,7 +77,7 @@ export default function CommentSection({ closeComments, post_id }: CommentSectio
 
     async function handleUploadComment(comment: string) {
         const comment_id = await uploadComment(post_id, comment);
-        if(comment_id){
+        if(comment_id && userInfo){
             const newComment = {
                 comment_id,
                 user_id: userInfo.user_hex_id,
