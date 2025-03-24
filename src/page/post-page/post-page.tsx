@@ -27,6 +27,7 @@ export default function PostPage() {
             if (!postId) return;
             try {
                 const postRes = await getPost(postId);
+                console.log(postRes);
                 setPost(postRes);
 
                 const commentsRes = await getComments(postId, 1);

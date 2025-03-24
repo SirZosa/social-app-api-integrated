@@ -8,7 +8,9 @@ import './user-page.css'
 import { useProfile } from '../../custom-hooks/useProfile';
 import { useProfilePosts } from '../../custom-hooks/useProfilePosts';
 import {UserContext} from '../../App';
-  export default function UserPage(){
+import { Skeleton } from '@mui/material';
+
+export default function UserPage(){
     const { id } = useParams();
     const { profile, isLoading } = useProfile(id!);
     const { profilePosts } = useProfilePosts(id!);
@@ -41,6 +43,26 @@ import {UserContext} from '../../App';
           alert('error following/unfollowing user')
       }
   }
+    if(isLoading) return (
+        <main>
+            <div className="profile-showcase" style={{backgroundImage: `url(${bg})`}}>
+            <img className="user-profile-pic" src={profile && profile.profile_pic ? profile.profile_pic : user} alt="user image" />
+            </div>
+            <div className="user-follow-info" style={{justifyContent: 'space-around'}}>
+                <Skeleton variant="text" width={75} height={40} sx={{ bgcolor: 'rgba(255, 255, 255, 0.2)' }} />
+                <Skeleton variant="text" width={75} height={40} sx={{ bgcolor: 'rgba(255, 255, 255, 0.2)' }} />
+                <Skeleton variant="text" width={75} height={40} sx={{ bgcolor: 'rgba(255, 255, 255, 0.2)' }} />
+            </div>
+            <div style={{ padding: '0 20px' }}>
+                <Skeleton variant="text" width={125} height={40} sx={{ bgcolor: 'rgba(255, 255, 255, 0.2)' }} style={{ marginBottom: '10px' }} />
+                {[1, 2, 3].map((item) => (
+                    <div key={item} style={{ marginBottom: '20px' }}>
+                        <Skeleton variant="rectangular" height={200} sx={{ bgcolor: 'rgba(255, 255, 255, 0.1)', borderRadius: '8px' }} />
+                    </div>
+                ))}
+            </div>
+        </main>
+    );
     return(
         <main>
             <div className="profile-showcase" style={{backgroundImage: `url(${bg})`}}>
