@@ -21,7 +21,7 @@ export default function SkeletonComponent({variant}: SkeletonComponentProps){
 
     else if(variant === 'comment'){
         return(
-            <div className="comment-skeleton">
+            <div className="comment-skeleton" >
                 <Skeleton sx={{bgcolor:'#222', marginTop:'10px'}} variant='circular' width={30} height={30} />
                 <div className="comment-content-skeleton">
                     <div className="comment-info-skeleton">
@@ -36,11 +36,13 @@ export default function SkeletonComponent({variant}: SkeletonComponentProps){
 
     else if(variant === 'user-card'){
         return(
-            <div className="post-header-skeleton">
-                    <Skeleton sx={{bgcolor:'#222'}} animation='wave' variant="circular" width={40} height={40} />
-                    <Skeleton sx={{bgcolor:'#222', fontSize:'18px'}} animation='wave' variant="text" width={100} />
-                    <Skeleton sx={{bgcolor:'#222', fontSize:'24px'}} animation='wave' variant="text" width={100} />
+            <div className="user-card-skeleton">
+                <div className="user-card-info-skeleton">
+                    <Skeleton sx={{bgcolor:'#222'}} animation='wave' variant="circular" width={50} height={50} />
+                    <Skeleton sx={{bgcolor:'#222', fontSize:'32px'}} animation='wave' variant="text" width={110} />
                 </div>
+                <Skeleton sx={{bgcolor:'#222', fontSize:'42px'}} animation='wave' variant="text" width={130} />
+            </div>
         )
     }
 }

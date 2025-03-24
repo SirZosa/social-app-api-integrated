@@ -9,4 +9,5 @@ export interface ProfileProps{
     followerCount: number;
     followingCount: number;
     isFollowing?: number;
+    user_id: string;
 }

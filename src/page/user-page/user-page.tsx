@@ -27,13 +27,14 @@ export default function UserPage(){
       if (!profile) return;
       try{
           if(isFollowing){
-              const unfollowed = await unfollowUser(profile.user_hex_id)
+              
+              const unfollowed = await unfollowUser(profile.user_id)
               if(unfollowed){
                   setIsFollowing(false)
               }
           }
           else{
-              const followed = await followUser(profile.user_hex_id)
+              const followed = await followUser(profile.user_id)
               if(followed){
                   setIsFollowing(true)
               }

@@ -14,6 +14,21 @@
     gap: 10px;
 }
 
+.user-card-skeleton{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 30px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.user-card-info-skeleton{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .comment-content-skeleton{
     width: 100%;
 }

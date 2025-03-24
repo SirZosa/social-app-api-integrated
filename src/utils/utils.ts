@@ -260,6 +260,31 @@ export async function unfollowUser(user_id:string):Promise<boolean>{
     }  
 }
 
+export async function removeFollower(user_id:string):Promise<boolean>{
+    const url = `http://localhost:3000/v1/removeFollower`;
+    try{
+        const res = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body:JSON.stringify({
+                followee_id:user_id
+            })
+        })
+        let unfollowed = false
+        if(res.status == 201){
+            unfollowed = true
+        }
+        return unfollowed
+    }
+    catch(e){
+        console.log("could not remove follower")
+        return false
+    }  
+}
+
 export async function getComments(post_id: string, page: number): Promise<CommentData[]> {
     const url = `http://localhost:3000/v1/comment/${post_id}?page=${page}`;
     try {
@@ -379,5 +404,45 @@ export async function getProfilePosts(user_hex_id: string, page: number, next: (
     } catch (e) {
         console.error('Error fetching posts:', e);
         next({ posts: [], hasMore: false }); // No more posts available
+    }
+}
+
+export async function getProfileFollowers(user_hex_id: string, page: number, next: (followersData: { followers: [], hasMore: boolean }) => void) {
+    try {
+        const url = `http://localhost:3000/v1/followers/${user_hex_id}?page=${page}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+        if(response.status == 200){
+            const data = await response.json()
+            next(data)
+        }
+    } catch (e) {
+        console.error('Error fetching followers:', e);
+        next({ followers: [], hasMore: false }); // No more followers available
+    }
+}
+
+export async function getProfileFollowing(user_hex_id: string, page: number, next: (followingData: { following: [], hasMore: boolean }) => void) {
+    try {
+        const url = `http://localhost:3000/v1/following/${user_hex_id}?page=${page}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+        if(response.status == 200){
+            const data = await response.json()
+            next(data)
+        }
+    } catch (e) {
+        console.error('Error fetching following:', e);
+        next({ following: [], hasMore: false }); // No more following available
     }
 }

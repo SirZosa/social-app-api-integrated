@@ -12,7 +12,7 @@ export default function Follow() {
             <span className={type == 'followers' ? 'follow-active' : ''}><Link to={`${location.pathname}?type=followers`}>Followers</Link></span>
             <span className={type == 'following' ? 'follow-active' : ''}><Link to={`${location.pathname}?type=following`}>Following</Link></span>
         </div>
-        {type == 'followers' ? <FollowSection type='followers' /> : <FollowSection type='following'/>}
+        <FollowSection type={type as 'followers' | 'following' || ''}/>
     </>
   );
 }
