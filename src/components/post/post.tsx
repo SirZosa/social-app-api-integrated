@@ -7,7 +7,7 @@ import LottiePlayer from '../lottie-player/lottie-player.tsx';
 import heart from '../../assets/heart.json';
 import save from '../../assets/save.json';
 import comment from '../../assets/comment.json';
-import { likePost, dislikePost, savePost, removePost } from '../../utils/utils.ts';
+import { likePost, dislikePost, savePost, removePost, deletePost } from '../../utils/utils.ts';
 export type PostProps = {
     media_url: string;
     username: string;
@@ -20,6 +20,8 @@ export type PostProps = {
     post_id: string
     is_liked?: number
     is_saved?:number
+    logged_user_id?: string
+    handleDelete: (post_id: string) => void
 }
 export default function Post({
     post_id,
@@ -32,7 +34,9 @@ export default function Post({
     profile_pic_url, 
     user_id, 
     is_liked=0, 
-    is_saved=0 
+    logged_user_id,
+    is_saved=0,
+    handleDelete 
     }: PostProps){
     const [openComments, setOpenComments] = useState(false)
     const [isLiked, setIsLiked] = useState(is_liked)
@@ -93,7 +97,20 @@ export default function Post({
             alert('error saving/removing post')
         }
     }
-    
+
+    async function handleDeleteBtn(){
+        try{
+            const deleted = await deletePost(post_id)
+            if(deleted){
+                handleDelete(post_id)
+            }
+        }
+        catch(e){
+            alert('error deleting post')
+        }
+    }
+
+    console.log(logged_user_id, user_id);
     return(
         <article className="post">
             <header className="post-header">
@@ -101,6 +118,7 @@ export default function Post({
                 <Link to={`/user/${user_id}`}>
                     <span>{username}</span>
                 </Link>
+                {logged_user_id == user_id && <button className="delete-btn" onClick={handleDeleteBtn}>×</button>}
             </header>
             <div className="post-content-container" onClick={() => navigate(`/post/${post_id}`)}>
                 <p className="post-content">{content}</p>

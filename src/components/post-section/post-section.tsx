@@ -10,10 +10,10 @@ import type { PostProps } from '../post/post';
 import './post-section.css';
 
 export default function PostSection({type}: {type: string}) {
+    const userInfo = useContext(UserContext);
     const [errorToUpload, setErrorToUpload] = useState(false);
     const { posts, setPosts, isLoading, setActive } = usePostFetching();
     const { followePosts, isFolloweeLoading, setFolloweeActive } = useFolloweePosts();
-    const userInfo = useContext(UserContext);
     const placeHolder = [
         <SkeletonComponent key={1} variant="post" />,
         <SkeletonComponent key={2} variant="post" />,
@@ -47,7 +47,11 @@ export default function PostSection({type}: {type: string}) {
                     content,
                     like_count: 0,
                     comment_count: 0,
-                    date_created: formattedDate
+                    date_created: formattedDate,
+                    is_liked: 0,
+                    is_saved: 0,
+                    logged_user_id: userInfo.user_hex_id,
+                    handleDelete
                 };
                 setPosts(prev => [newPost, ...prev]);
                 setErrorToUpload(false);
@@ -57,6 +61,10 @@ export default function PostSection({type}: {type: string}) {
         } catch (e) {
             alert('Could not made the post.');
         }
+    }
+
+    function handleDelete(post_id: string) {
+        setPosts(prev => prev.filter(post => post.post_id !== post_id))
     }
 
     const renderPosts = (postsData: PostProps[]) => {
@@ -74,6 +82,8 @@ export default function PostSection({type}: {type: string}) {
                 comment_count={post.comment_count}
                 is_liked={post.is_liked}
                 is_saved={post.is_saved}
+                logged_user_id={userInfo?.user_hex_id}
+                handleDelete={handleDelete}
             />
         ));
     };
@@ -90,6 +100,8 @@ export default function PostSection({type}: {type: string}) {
 
         return renderPosts(currentPosts);
     };
+
+    console.log(userInfo);
 
     const content = type === '' && posts.length === 0 && isLoading ? placeHolder : type === 'following' && followePosts.length === 0 && isFolloweeLoading ? placeHolder : renderContent();
 

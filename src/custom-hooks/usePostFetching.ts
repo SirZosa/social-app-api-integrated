@@ -28,6 +28,8 @@ export function usePostFetching() {
         });
     }
 
+    useEffect(() => console.log(posts), [posts]);
+
     const fetchMorePosts = async () => {
         if (isLoading || !hasMore) return;
         setIsLoading(true);

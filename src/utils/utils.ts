@@ -191,6 +191,49 @@ export async function uploadPost(content:string, media_url?:string| undefined){
     }
 }
 
+export async function deletePost(post_id:string):Promise<boolean>{
+    const url = `http://localhost:3000/v1/posts/${post_id}`;
+    try{
+        const res = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+        console.log(res.status)
+        if(res.status == 200){
+            return true
+        }
+        return false
+    }
+    catch(e){
+        console.log("could not delete post")
+        return false
+    }
+}
+
+export async function deleteComment(comment_id:string):Promise<boolean>{
+    const url = `http://localhost:3000/v1/comments/${comment_id}`;
+    try{
+        const res = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+        if(res.status == 200){
+            return true
+        }
+        return false
+    }
+    catch(e){
+        console.log("could not delete comment")
+        return false
+    }
+}
+
 export async function getUserInfo(){
     const url = 'http://localhost:3000/v1/user'
     try{
