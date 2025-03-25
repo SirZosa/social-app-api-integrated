@@ -83,6 +83,10 @@ export async function likePost(post_id:string):Promise<boolean>{
         if(res.status == 201){
             liked = true
         }
+        if(res.status == 401){
+            alert("Login required")
+            return false
+        }
         return liked
     }
     catch(e){
@@ -108,6 +112,10 @@ export async function dislikePost(post_id:string):Promise<boolean>{
         if(res.status == 200){
             disliked = true
         }
+        if(res.status == 401){
+            alert("Login required")
+            return false
+        }
         return disliked
     }
     catch(e){
@@ -132,6 +140,10 @@ export async function savePost(post_id:string):Promise<boolean>{
         let saved = false
         if(res.status == 201){
             saved = true
+        }
+        if(res.status == 401){
+            alert("Login required")
+            return false
         }
         return saved
     }
@@ -183,6 +195,10 @@ export async function uploadPost(content:string, media_url?:string| undefined){
         if(res.status == 201){
             const post_id = await res.json()
             return post_id
+        }
+        if(res.status == 401){
+            alert("Login required")
+            return false
         }
     }
     catch(e){
@@ -269,6 +285,10 @@ export async function followUser(user_id:string):Promise<boolean>{
         if(res.status == 201){
             followed = true
         }
+        if(res.status == 401){
+            alert("Login required")
+            return false
+        }
         return followed
     }
     catch(e){
@@ -293,6 +313,9 @@ export async function unfollowUser(user_id:string):Promise<boolean>{
         let unfollowed = false
         if(res.status == 201){
             unfollowed = true
+        }if(res.status == 401){
+            alert("Login required")
+            return false
         }
         return unfollowed
     }
@@ -363,6 +386,10 @@ export async function uploadComment(post_id: string, comment: string):Promise<st
     if(posted.status == 201){
         const comment_id = await posted.json()
         return comment_id
+    }
+    if(posted.status == 401){
+        alert("Login required")
+        return ''
     }
     return ''
 }
