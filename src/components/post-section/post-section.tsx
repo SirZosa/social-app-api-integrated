@@ -101,8 +101,6 @@ export default function PostSection({type}: {type: string}) {
         return renderPosts(currentPosts);
     };
 
-    console.log(userInfo);
-
     const content = type === '' && posts.length === 0 && isLoading ? placeHolder : type === 'following' && followePosts.length === 0 && isFolloweeLoading ? placeHolder : renderContent();
 
     return (

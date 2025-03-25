@@ -82,6 +82,10 @@ export default function PostPage() {
         return () => commentsContainer.removeEventListener('scroll', handleScroll);
     }, [isLoading, hasMore, fetchComments]);
 
+    async function handleDeleteComment(commentId: string) {
+        setComments(prev => prev.filter(comment => comment.comment_id !== commentId));
+}
+
     // Handle new comment submission
     const handleNewComment = async (comment: string) => {
         if (!postId) return;
@@ -130,6 +134,9 @@ export default function PostPage() {
                                 username={comment.username}
                                 comment={comment.content}
                                 date={new Date(comment.date_created).toLocaleString()}
+                                comment_id={comment.comment_id}
+                                user_id={comment.user_id}
+                                handleDeleteComment={handleDeleteComment}
                             />
                         ))}
                         {isLoading && (

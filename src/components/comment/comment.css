@@ -11,6 +11,7 @@
 
 .comment-content{
     width: 100%;
+    position: relative;
 }
 
 a{
@@ -36,4 +37,22 @@ a{
     font-size: 14px;
     color: #666;
     margin-left: 10px;
+}
+
+.delete-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 8px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.delete-btn:hover {
+    color: #ff4444;
 }

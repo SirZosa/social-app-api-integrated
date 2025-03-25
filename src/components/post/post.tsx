@@ -110,7 +110,6 @@ export default function Post({
         }
     }
 
-    console.log(logged_user_id, user_id);
     return(
         <article className="post">
             <header className="post-header">

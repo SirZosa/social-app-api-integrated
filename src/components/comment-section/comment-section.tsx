@@ -91,13 +91,21 @@ export default function CommentSection({ closeComments, post_id }: CommentSectio
         }
     }
 
+    async function handleDeleteComment(commentId: string) {
+            setComments(prev => prev.filter(comment => comment.comment_id !== commentId));
+    }
+
     const commentsCards = comments.map((comment) => {
         return <Comment
+                user_id={comment.user_id}
+                logged_user_id={userInfo?.user_hex_id}
                 key={comment.comment_id}
+                comment_id={comment.comment_id}
                 imgSrc={comment.profile_pic_url ? comment.profile_pic_url : userPic}
                 username={comment.username}
                 comment={comment.content}
                 date={new Date(comment.date_created).toLocaleString()}
+                handleDeleteComment={handleDeleteComment}
             />
         ;
     });

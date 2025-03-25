@@ -201,7 +201,6 @@ export async function deletePost(post_id:string):Promise<boolean>{
             },
             credentials: 'include'
         })
-        console.log(res.status)
         if(res.status == 200){
             return true
         }
@@ -214,7 +213,7 @@ export async function deletePost(post_id:string):Promise<boolean>{
 }
 
 export async function deleteComment(comment_id:string):Promise<boolean>{
-    const url = `http://localhost:3000/v1/comments/${comment_id}`;
+    const url = `http://localhost:3000/v1/comment/${comment_id}`;
     try{
         const res = await fetch(url, {
             method: 'DELETE',

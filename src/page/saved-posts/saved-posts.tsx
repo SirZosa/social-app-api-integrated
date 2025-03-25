@@ -2,9 +2,13 @@ import Post from '../../components/post/post';
 import { useSavedPosts } from '../../custom-hooks/useSavedPosts';
 import SkeletonComponent from '../../components/skeleton/skeleton-component';
 import type { PostProps } from '../../components/post/post';
+import { UserContext } from '../../App';
+import { useContext } from 'react';
+
 
 export default function SavedPosts() {
-    const { savedPosts, isSaveLoading } = useSavedPosts();
+    const { savedPosts,setSavedPosts, isSaveLoading } = useSavedPosts();
+    const userInfo = useContext(UserContext);
     
     const placeHolder = [
         <SkeletonComponent key={1} variant="post" />,
@@ -13,6 +17,10 @@ export default function SavedPosts() {
         <SkeletonComponent key={4} variant="post" />,
         <SkeletonComponent key={5} variant="post" />
     ];
+
+    function handleDelete(post_id: string) {
+        setSavedPosts(prev => prev.filter(post => post.post_id !== post_id))
+    }
 
     const renderPosts = (postsData: PostProps[]) => {
         return postsData.map((post) => (
@@ -29,6 +37,8 @@ export default function SavedPosts() {
                 comment_count={post.comment_count}
                 is_liked={post.is_liked}
                 is_saved={post.is_saved}
+                logged_user_id={userInfo?.user_hex_id}
+                handleDelete={handleDelete}
             />
         ));
     };
