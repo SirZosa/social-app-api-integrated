@@ -1,9 +1,10 @@
 import type {CommentData} from '../components/comment-section/comment-section'
 import type {PostProps} from '../components/post/post'
 import  {ProfileProps} from '../interfaces/interfaces'
+const serviceUrl = 'https://social-app-backend-xcpr.onrender.com/v1'
 export async function getPosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
     try {
-        const url = `http://localhost:3000/v1/posts?page=${page}`;
+        const url = `${serviceUrl}/posts?page=${page}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -23,7 +24,7 @@ export async function getPosts(page: number, next: (postsData: { posts: [], hasM
 
 export async function getFolloweePosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
     try {
-        const url = `http://localhost:3000/v1/posts/following?page=${page}`;
+        const url = `${serviceUrl}/posts/following?page=${page}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -45,7 +46,7 @@ export async function getFolloweePosts(page: number, next: (postsData: { posts: 
 }
 export async function getSavedPosts(page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
     try {
-        const url = `http://localhost:3000/v1/posts/saved?page=${page}`;
+        const url = `${serviceUrl}/posts/saved?page=${page}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -67,7 +68,7 @@ export async function getSavedPosts(page: number, next: (postsData: { posts: [],
 }
 
 export async function likePost(post_id:string):Promise<boolean>{
-    const url = `http://localhost:3000/v1/like`;
+    const url = `${serviceUrl}/like`;
     try{
         const res = await fetch(url, {
             method: 'POST',
@@ -96,7 +97,7 @@ export async function likePost(post_id:string):Promise<boolean>{
 }
 
 export async function dislikePost(post_id:string):Promise<boolean>{
-    const url = `http://localhost:3000/v1/like`;
+    const url = `${serviceUrl}/like`;
     try{
         const res = await fetch(url, {
             method: 'DELETE',
@@ -125,7 +126,7 @@ export async function dislikePost(post_id:string):Promise<boolean>{
 }
 
 export async function savePost(post_id:string):Promise<boolean>{
-    const url = `http://localhost:3000/v1/savepost`;
+    const url = `${serviceUrl}/savepost`;
     try{
         const res = await fetch(url, {
             method: 'POST',
@@ -154,7 +155,7 @@ export async function savePost(post_id:string):Promise<boolean>{
 }
 
 export async function removePost(post_id:string):Promise<boolean>{
-    const url = `http://localhost:3000/v1/savepost`;
+    const url = `${serviceUrl}/savepost`;
     try{
         const res = await fetch(url, {
             method: 'DELETE',
@@ -179,7 +180,7 @@ export async function removePost(post_id:string):Promise<boolean>{
 }
 
 export async function uploadPost(content:string, media_url?:string| undefined){
-    const url = `http://localhost:3000/v1/posts`;
+    const url = `${serviceUrl}/posts`;
     try{
         const res = await fetch(url,{
             method: 'POST',
@@ -208,7 +209,7 @@ export async function uploadPost(content:string, media_url?:string| undefined){
 }
 
 export async function deletePost(post_id:string):Promise<boolean>{
-    const url = `http://localhost:3000/v1/posts/${post_id}`;
+    const url = `${serviceUrl}/posts/${post_id}`;
     try{
         const res = await fetch(url, {
             method: 'DELETE',
@@ -229,7 +230,7 @@ export async function deletePost(post_id:string):Promise<boolean>{
 }
 
 export async function deleteComment(comment_id:string):Promise<boolean>{
-    const url = `http://localhost:3000/v1/comment/${comment_id}`;
+    const url = `${serviceUrl}/comment/${comment_id}`;
     try{
         const res = await fetch(url, {
             method: 'DELETE',
@@ -250,7 +251,7 @@ export async function deleteComment(comment_id:string):Promise<boolean>{
 }
 
 export async function getUserInfo(){
-    const url = 'http://localhost:3000/v1/user'
+    const url = `${serviceUrl}/user`
     try{
         const res = await fetch(url, {
           method: 'GET',
@@ -269,7 +270,7 @@ export async function getUserInfo(){
 }
 
 export async function followUser(user_id:string):Promise<boolean>{
-    const url = `http://localhost:3000/v1/follow`;
+    const url = `${serviceUrl}/follow`;
     try{
         const res = await fetch(url, {
             method: 'POST',
@@ -298,7 +299,7 @@ export async function followUser(user_id:string):Promise<boolean>{
 }
 
 export async function unfollowUser(user_id:string):Promise<boolean>{
-    const url = `http://localhost:3000/v1/follow`;
+    const url = `${serviceUrl}/follow`;
     try{
         const res = await fetch(url, {
             method: 'DELETE',
@@ -326,7 +327,7 @@ export async function unfollowUser(user_id:string):Promise<boolean>{
 }
 
 export async function removeFollower(user_id:string):Promise<boolean>{
-    const url = `http://localhost:3000/v1/removeFollower`;
+    const url = `${serviceUrl}/removeFollower`;
     try{
         const res = await fetch(url, {
             method: 'DELETE',
@@ -351,7 +352,7 @@ export async function removeFollower(user_id:string):Promise<boolean>{
 }
 
 export async function getComments(post_id: string, page: number): Promise<CommentData[]> {
-    const url = `http://localhost:3000/v1/comment/${post_id}?page=${page}`;
+    const url = `${serviceUrl}/comment/${post_id}?page=${page}`;
     try {
         const res = await fetch(url, {
             method: 'GET',
@@ -372,7 +373,7 @@ export async function getComments(post_id: string, page: number): Promise<Commen
 }
 
 export async function uploadComment(post_id: string, comment: string):Promise<string>{
-    const posted = await fetch('http://localhost:3000/v1/comment', {
+    const posted = await fetch(`${serviceUrl}/comment`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -395,7 +396,7 @@ export async function uploadComment(post_id: string, comment: string):Promise<st
 }
 
 export async function getPost(post_id: string): Promise<PostProps | null> {
-    const url = `http://localhost:3000/v1/post/${post_id}`;
+    const url = `${serviceUrl}/post/${post_id}`;
     try {
         const res = await fetch(url, {
             method: 'GET',
@@ -416,7 +417,7 @@ export async function getPost(post_id: string): Promise<PostProps | null> {
 }
 
 export async function logout(): Promise<boolean> {
-    const url = 'http://localhost:3000/v1/logout';
+    const url = `${serviceUrl}/logout`;
     try {
         const res = await fetch(url, {
             method: 'POST',
@@ -435,8 +436,8 @@ export async function logout(): Promise<boolean> {
     }
 }
 
-export async function getProfile(user_hex_id: string): Promise<ProfileProps | null> {
-    const url = `http://localhost:3000/v1/profile/${user_hex_id}`;
+export async function getProfile(user_hex_id: string): Promise<ProfileProps | null> {   
+    const url = `${serviceUrl}/profile/${user_hex_id}`;
     try {
         const res = await fetch(url, {
             method: 'GET',
@@ -458,7 +459,7 @@ export async function getProfile(user_hex_id: string): Promise<ProfileProps | nu
 
 export async function getProfilePosts(user_hex_id: string, page: number, next: (postsData: { posts: [], hasMore: boolean }) => void) {
     try {
-        const url = `http://localhost:3000/v1/profile/${user_hex_id}/posts?page=${page}`;
+        const url = `${serviceUrl}/profile/${user_hex_id}/posts?page=${page}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -478,7 +479,7 @@ export async function getProfilePosts(user_hex_id: string, page: number, next: (
 
 export async function getProfileFollowers(user_hex_id: string, page: number, next: (followersData: { followers: [], hasMore: boolean }) => void) {
     try {
-        const url = `http://localhost:3000/v1/followers/${user_hex_id}?page=${page}`;
+        const url = `${serviceUrl}/followers/${user_hex_id}?page=${page}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -498,7 +499,7 @@ export async function getProfileFollowers(user_hex_id: string, page: number, nex
 
 export async function getProfileFollowing(user_hex_id: string, page: number, next: (followingData: { following: [], hasMore: boolean }) => void) {
     try {
-        const url = `http://localhost:3000/v1/following/${user_hex_id}?page=${page}`;
+        const url = `${serviceUrl}/following/${user_hex_id}?page=${page}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {

@@ -27,7 +27,7 @@ export default function SignUpForm() {
       return
     }
     setLoading(true)
-    fetch('http://localhost:3000/v1/signup', {
+    fetch('https://social-app-backend-xcpr.onrender.com/v1/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

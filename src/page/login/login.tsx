@@ -14,7 +14,7 @@ export default function LogIn() {
     e.preventDefault();
     setLoading(true)
     try{
-      const res = await fetch('http://localhost:3000/v1/login', {
+      const res = await fetch('https://social-app-backend-xcpr.onrender.com/v1/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
