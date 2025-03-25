@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react";
+import SkeletonComponent from "../skeleton/skeleton-component";
 import WriteComment from "../write-comment/write-comment";
 import userPic from '../../assets/user.svg';
 import back from '../../assets/back.svg';
@@ -21,6 +22,19 @@ export type CommentData = {
     date_created: string;
     post_id: string;
 }
+
+const placeHolder = [
+    <SkeletonComponent key={1} variant="comment" />,
+    <SkeletonComponent key={2} variant="comment" />,
+    <SkeletonComponent key={3} variant="comment" />,
+    <SkeletonComponent key={4} variant="comment" />,
+    <SkeletonComponent key={5} variant="comment" />,
+    <SkeletonComponent key={6} variant="comment" />,
+    <SkeletonComponent key={7} variant="comment" />,
+    <SkeletonComponent key={8} variant="comment" />,
+    <SkeletonComponent key={9} variant="comment" />,
+    <SkeletonComponent key={10} variant="comment" />,
+]
 
 export default function CommentSection({ closeComments, post_id }: CommentSectionProps) {
     const [comments, setComments] = useState<CommentData[]>([]);
@@ -117,7 +131,7 @@ export default function CommentSection({ closeComments, post_id }: CommentSectio
             </button>
             <div className="comments" ref={commentsRef}>
                 {commentsCards.length > 0 ? commentsCards : <p>No comments yet</p>}
-                {isLoading && <p className="loading-text">Loading more comments...</p>}
+                {isLoading && placeHolder}
                 {!hasMore && comments.length > 0 && <p className="loading-text">No more comments to load.</p>}
             </div>
             <WriteComment onSubmit={(comment: string) => handleUploadComment(comment)} />
