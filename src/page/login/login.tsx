@@ -14,6 +14,7 @@ export default function LogIn() {
   async function submitForm(e: React.FormEvent){
     e.preventDefault();
     setLoading(true)
+    setError(false)
     try{
       const res = await fetch('https://social-app-backend-xcpr.onrender.com/v1/login', {
         method: 'POST',
