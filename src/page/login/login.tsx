@@ -7,6 +7,7 @@ export default function LogIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
   const [searchParams] = useSearchParams()
+  const [error, setError] = useState(false)
   const registered = searchParams.get('registered')
   const navigate = useNavigate();
 
@@ -28,6 +29,10 @@ export default function LogIn() {
           navigate('/')
           window.location.reload();
         }
+        if(res.status == 401){
+          setError(true)
+        }
+        setLoading(false)
     }
     catch(e){
       alert('Could not log in')
@@ -41,7 +46,7 @@ export default function LogIn() {
         <h1 className='signup-header' style={{textAlign:"center"}}>Log In</h1>
         <form className='signup-form' onSubmit={submitForm}>
           <InputField value={email} type="email" fc={(e)=>setEmail(e.target.value)}>Email</InputField>
-          <InputField value={password} type="password" fc={(e)=>setPassword(e.target.value)}>Password</InputField>
+          <InputField value={password} type="password" fc={(e)=>setPassword(e.target.value)} error={error ? "Invalid email or password" : ""}>Password</InputField>
           <div className="signup-form-buttons">
             <button className='signup-button' disabled={loading}>LogIn</button>
           </div>
